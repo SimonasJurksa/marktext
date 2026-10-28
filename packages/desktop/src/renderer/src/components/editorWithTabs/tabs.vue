@@ -34,6 +34,11 @@
             <Lock />
           </el-icon>
           <span>{{ file.filename }}</span>
+          <span
+            v-if="planBadges[file.id]"
+            class="plan-badge"
+            :class="planBadges[file.id]!.done ? 'done' : 'pending'"
+          >{{ planBadges[file.id]!.label }}</span>
           <span class="unsaved-dot" />
           <button
             type="button"
@@ -64,7 +69,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { useEditorStore } from '@/store/editor'
 import { storeToRefs } from 'pinia'
 import autoScroll from 'dom-autoscroller'
@@ -75,6 +80,7 @@ import IconTooltip from '@/components/iconTooltip/index.vue'
 import { showContextMenu } from '../../contextMenu/tabs'
 import bus from '../../bus'
 import type { IFileState } from '@shared/types/files'
+import { parsePlanQuestions } from '@/planQuestions'
 
 const { t } = useI18n()
 const editorStore = useEditorStore()
@@ -96,6 +102,16 @@ const tabDropContainer = ref<HTMLElement | null>(null)
 let autoScroller: AutoScroller | null = null
 let drake: dragula.Drake | null = null
 
+
+// Plan-question progress per tab, e.g. `3/15`; absent for documents without questions.
+const planBadges = computed<Record<string, { label: string; done: boolean }>>(() => {
+  const badges: Record<string, { label: string; done: boolean }> = {}
+  for (const file of tabs.value) {
+    const { answered, total } = parsePlanQuestions(file.markdown)
+    if (total) badges[file.id] = { label: `${answered}/${total}`, done: answered === total }
+  }
+  return badges
+})
 
 const selectFile = (file: IFileState) => {
   if (file.id !== currentFile.value?.id) {
@@ -370,6 +386,21 @@ onBeforeUnmount(() => {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+    & > .plan-badge {
+      margin-left: 6px;
+      padding: 0 5px;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 600;
+      line-height: 14px;
+      color: #fff;
+      &.pending {
+        background: #e5484d;
+      }
+      &.done {
+        background: #30a46c;
+      }
     }
     & > .unsaved-dot {
       display: none;

@@ -18,7 +18,8 @@ Status: 🚧 planned · ✅ done
 | Folder search improvements (file names + content, ripgrep, no indexing) | 🚧 |
 | Git change markers in the gutter and diff against `HEAD` | 🚧 |
 | Git blame for the current line / file | 🚧 |
-| `plan.md` support: answer questions an AI agent leaves in a plan, inline | 🚧 |
+| **Plan questions**: documents using the `**K1. Question**` / `a) … b) …` / `Atsakymas:` template show an answered/total badge (red until complete, green when done) in the title bar and on the tab; **Ctrl+Shift+K** opens a wizard that walks through unanswered questions (letter keys pick an option, Enter moves on) and writes `a` or `a — comment` straight into the document | ✅ |
+| Auto save on by default, 2 s after the last change | ✅ |
 
 ## Changed keybindings
 
@@ -26,6 +27,24 @@ Status: 🚧 planned · ✅ done
 |---|---|---|
 | Switch to open file | — | <kbd>Ctrl</kbd>+<kbd>E</kbd> |
 | Source code mode | <kbd>Ctrl</kbd>+<kbd>E</kbd> | <kbd>Ctrl</kbd>+<kbd>/</kbd> |
+| Answer plan questions (wizard) | — | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd> |
+| Insert code fence | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd> | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>K</kbd> |
+
+## Plan question template
+
+```markdown
+**K1. Question title?**
+
+**Trumpai:** optional explanation.
+
+a) first option (rekomenduojama)
+b) second option
+
+Atsakymas:
+```
+
+Any short letter prefix works (`K1`, `N3`, `Q12`). A question counts as answered when text follows
+`Atsakymas:` on the same line or on the lines below it. `---` or a heading ends a question.
 
 ## Scope
 

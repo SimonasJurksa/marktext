@@ -168,6 +168,13 @@ export default function(keybindings: Keybindings): MenuItemConstructorOptions {
         type: 'separator'
       },
       {
+        label: t('menu.edit.answerPlanQuestions'),
+        accelerator: keybindings.getAccelerator(COMMANDS.EDIT_ANSWER_PLAN_QUESTIONS) ?? undefined,
+        click(_menuItem, browserWindow) {
+          actions.answerPlanQuestions(browserWindow as BrowserWindow | undefined)
+        }
+      },
+      {
         label: t('menu.edit.findInFolder'),
         accelerator: keybindings.getAccelerator(COMMANDS.EDIT_FIND_IN_FOLDER) ?? undefined,
         click(_menuItem, browserWindow) {

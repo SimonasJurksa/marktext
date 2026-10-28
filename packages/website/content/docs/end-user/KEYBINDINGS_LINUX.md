@@ -44,6 +44,7 @@ MarkText key bindings for Linux. Please see [general key bindings](KEYBINDINGS.m
 | `edit.find-previous`      | <kbd>Shift</kbd>+<kbd>F3</kbd>                | Continue the search and find the previous match |
 | `edit.replace`            | <kbd>Ctrl</kbd>+<kbd>R</kbd>                  | Replace the information with a replacement      |
 | `edit.find-in-folder`     | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd> | Find files contain the keyword in opend folder  |
+| `edit.answer-plan-questions` | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd> | Answer plan questions (wizard)             |
 
 #### Paragraph menu
 
@@ -58,7 +59,7 @@ MarkText key bindings for Linux. Please see [general key bindings](KEYBINDINGS.m
 | `paragraph.upgrade-heading` | <kbd>Ctrl</kbd>+<kbd>Plus</kbd>               | Upgrade a heading                        |
 | `paragraph.degrade-heading` | <kbd>Ctrl</kbd>+<kbd>-</kbd>                  | Degrade a heading                        |
 | `paragraph.table`           | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>T</kbd> | Insert a table                           |
-| `paragraph.code-fence`      | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd> | Insert a code block                      |
+| `paragraph.code-fence`      | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>K</kbd>   | Insert a code block                      |
 | `paragraph.quote-block`     | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd> | Insert a quote block                     |
 | `paragraph.math-formula`    | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>M</kbd>   | Insert a math block                      |
 | `paragraph.html-block`      | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>H</kbd>   | Insert a HTML block                      |

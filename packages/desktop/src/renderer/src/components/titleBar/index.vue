@@ -61,6 +61,7 @@
         >
           <span class="text-center-vertical">&#9776;</span>
         </button>
+        <plan-badge :markdown="currentFile?.markdown" />
         <document-statistics
           v-if="wordCount"
           :pathname="pathname"
@@ -159,6 +160,7 @@ import { useI18n } from 'vue-i18n'
 import { ArrowRight } from '@element-plus/icons-vue'
 import IconTooltip from '@/components/iconTooltip/index.vue'
 import DocumentStatistics from './documentStatistics.vue'
+import PlanBadge from './planBadge.vue'
 import type { FileWordCount } from '@shared/types/files'
 
 interface ProjectInfo {

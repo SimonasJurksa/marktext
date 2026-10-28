@@ -43,6 +43,7 @@ const keybindings: Map<string, string> = new Map([
   ['edit.find-previous', 'Shift+F3'],
   ['edit.replace', 'Ctrl+R'],
   ['edit.find-in-folder', 'Ctrl+Shift+F'],
+  ['edit.answer-plan-questions', 'Ctrl+Shift+K'],
   ['edit.screenshot', ''], // macOS only
 
   ['paragraph.heading-1', 'Ctrl+Alt+1'],
@@ -54,7 +55,7 @@ const keybindings: Map<string, string> = new Map([
   ['paragraph.upgrade-heading', 'Ctrl+Plus'],
   ['paragraph.degrade-heading', 'Ctrl+-'],
   ['paragraph.table', 'Ctrl+Shift+T'],
-  ['paragraph.code-fence', 'Ctrl+Shift+K'],
+  ['paragraph.code-fence', 'Ctrl+Alt+K'],
   ['paragraph.quote-block', 'Ctrl+Shift+Q'],
   ['paragraph.math-formula', 'Ctrl+Alt+M'],
   ['paragraph.html-block', 'Ctrl+Alt+H'],

@@ -234,6 +234,13 @@ const commands: CommandDescriptor[] = [
       bus.emit('mt::editor-edit-action', 'findInFolder')
     }
   },
+  {
+    id: 'edit.answer-plan-questions',
+    execute: async() => {
+      await delay(150)
+      bus.emit('plan-wizard::open')
+    }
+  },
 
 
   {
