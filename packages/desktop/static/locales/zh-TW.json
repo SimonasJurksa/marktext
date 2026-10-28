@@ -303,7 +303,8 @@
       "selectOption": "選擇選項",
       "searchFileToOpen": "搜尋要開啟的檔案",
       "selectLanguage": "選擇語言",
-      "searchRecentFilesAndFolders": "搜尋最近開啟的檔案與資料夾"
+      "searchRecentFilesAndFolders": "搜尋最近開啟的檔案與資料夾",
+      "searchOpenTabs": "Search open files by name or content"
     },
     "recentlyOpened": "最近開啟",
     "fileResults": "檔案結果",
@@ -311,7 +312,10 @@
     "files": "檔案",
     "removeFromRecent": "從最近使用中移除",
     "noResults": "沒有符合的結果",
-    "noRecentFiles": "尚無最近開啟的檔案或資料夾"
+    "noRecentFiles": "尚無最近開啟的檔案或資料夾",
+    "openTabs": "open files",
+    "inOpenTabs": "matches in open files",
+    "noOpenTabs": "No open files"
   },
   "exportSettings": {
     "autoNumberingHeadings": "自動編號標題",
@@ -858,6 +862,7 @@
       "renameFile": "重新命名檔案",
       "quickOpen": "快速開啟",
       "quickOpenRecent": "快速開啟最近使用",
+      "quickOpenTabs": "Switch to Open File",
       "changeEncoding": "變更編碼",
       "changeLineEnding": "變更行結束符",
       "trailingNewline": "結尾換行",

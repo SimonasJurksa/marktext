@@ -303,7 +303,8 @@
       "selectOption": "옵션 선택",
       "searchFileToOpen": "열 파일 검색",
       "selectLanguage": "언어 선택",
-      "searchRecentFilesAndFolders": "최근 파일 및 폴더 검색"
+      "searchRecentFilesAndFolders": "최근 파일 및 폴더 검색",
+      "searchOpenTabs": "Search open files by name or content"
     },
     "recentlyOpened": "최근 항목",
     "fileResults": "파일 결과",
@@ -311,7 +312,10 @@
     "files": "파일",
     "removeFromRecent": "최근 항목에서 제거",
     "noResults": "일치하는 결과 없음",
-    "noRecentFiles": "최근 파일 또는 폴더 없음"
+    "noRecentFiles": "최근 파일 또는 폴더 없음",
+    "openTabs": "open files",
+    "inOpenTabs": "matches in open files",
+    "noOpenTabs": "No open files"
   },
   "exportSettings": {
     "autoNumberingHeadings": "제목 자동 번호 매기기",
@@ -858,6 +862,7 @@
       "renameFile": "파일 이름 바꾸기",
       "quickOpen": "빠른 열기",
       "quickOpenRecent": "최근 항목 빠른 열기",
+      "quickOpenTabs": "Switch to Open File",
       "changeEncoding": "인코딩 변경",
       "changeLineEnding": "줄 끝 변경",
       "trailingNewline": "끝 줄바꿈",

@@ -16,6 +16,7 @@ import {
   LineEndingCommand,
   QuickOpenCommand,
   QuickOpenRecentCommand,
+  QuickOpenTabsCommand,
   TrailingNewlineCommand
 } from '../commands'
 import { defineStore } from 'pinia'
@@ -1024,6 +1025,7 @@ export const useEditorStore = defineStore('editor', {
           })
         )
         bus.emit('cmd::register-command', new QuickOpenRecentCommand())
+        bus.emit('cmd::register-command', new QuickOpenTabsCommand(this))
         bus.emit('cmd::register-command', new LineEndingCommand(this))
         bus.emit('cmd::register-command', new TrailingNewlineCommand(this))
 

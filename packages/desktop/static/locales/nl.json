@@ -303,7 +303,8 @@
       "selectOption": "Selecteer een optie",
       "searchFileToOpen": "Zoek bestand om te openen",
       "selectLanguage": "Selecteer een taal om naar te wisselen",
-      "searchRecentFilesAndFolders": "Recente bestanden en mappen doorzoeken"
+      "searchRecentFilesAndFolders": "Recente bestanden en mappen doorzoeken",
+      "searchOpenTabs": "Search open files by name or content"
     },
     "recentlyOpened": "recent geopend",
     "fileResults": "bestandsresultaten",
@@ -311,7 +312,10 @@
     "files": "bestanden",
     "removeFromRecent": "Verwijderen uit recent geopend",
     "noResults": "Geen overeenkomende resultaten",
-    "noRecentFiles": "Geen recente bestanden of mappen"
+    "noRecentFiles": "Geen recente bestanden of mappen",
+    "openTabs": "open files",
+    "inOpenTabs": "matches in open files",
+    "noOpenTabs": "No open files"
   },
   "exportSettings": {
     "autoNumberingHeadings": "Automatisch nummeren van koppen",
@@ -858,6 +862,7 @@
       "renameFile": "Bestand hernoemen",
       "quickOpen": "Snel openen",
       "quickOpenRecent": "Recent snel openen",
+      "quickOpenTabs": "Switch to Open File",
       "changeEncoding": "Codering wijzigen",
       "changeLineEnding": "Regeleinde wijzigen",
       "trailingNewline": "Afsluitende lege regel",

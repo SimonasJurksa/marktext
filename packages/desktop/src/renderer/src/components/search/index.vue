@@ -254,9 +254,14 @@ const toggleCtrl = (ctrl: 'isCaseSensitive' | 'isWholeWord' | 'isRegexp') => {
   searchFn()
 }
 
-const listenFind = () => {
+const listenFind = (payload?: unknown) => {
   if (currentFile.value?.readOnly) return
-  prefillFromSelection()
+  const query = (payload as { query?: unknown } | null)?.query
+  if (typeof query === 'string' && query) {
+    searchValue.value = query
+  } else {
+    prefillFromSelection()
+  }
   showSearch.value = true
   type.value = 'search'
   nextTick(() => {

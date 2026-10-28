@@ -88,7 +88,7 @@ const keybindings: Map<string, string> = new Map([
 
   ['view.read-only-mode', 'Ctrl+Alt+R'],
   ['view.command-palette', 'Ctrl+Shift+P'],
-  ['view.source-code-mode', 'Ctrl+E'],
+  ['view.source-code-mode', 'Ctrl+/'],
   ['view.typewriter-mode', 'Ctrl+Shift+G'],
   ['view.focus-mode', 'Ctrl+Shift+J'],
   ['view.toggle-sidebar', 'Ctrl+J'],
@@ -113,7 +113,8 @@ const keybindings: Map<string, string> = new Map([
   ['tabs.switchToNinth', 'Ctrl+9'],
   ['tabs.switchToTenth', 'Ctrl+0'],
   ['file.quick-open', 'Ctrl+P'],
-  ['file.quick-open-recent', '']
+  ['file.quick-open-recent', ''],
+  ['file.quick-open-tabs', 'Ctrl+E']
 ])
 
 export default keybindings

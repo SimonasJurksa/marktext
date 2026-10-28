@@ -169,10 +169,7 @@ linux:
       StartupWMClass: 'marktext'
       Keywords: 'marktext;'
   target:
-    - AppImage
-    - snap
     - deb
-    - rpm
     - tar.gz
   fileAssociations:
     - ext: 'md'

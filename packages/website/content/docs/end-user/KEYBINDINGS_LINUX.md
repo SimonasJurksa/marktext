@@ -104,7 +104,7 @@ MarkText key bindings for Linux. Please see [general key bindings](KEYBINDINGS.m
 | ----------------------- | --------------------------------------------- | ---------------------------------------- |
 | `view.command-palette`  | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> | Toggle command palette                   |
 | `view.read-only-mode`   | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd>   | Toggle Reading Mode for the current tab  |
-| `view.source-code-mode` | <kbd>Ctrl</kbd>+<kbd>E</kbd>                  | Switch to source code mode               |
+| `view.source-code-mode` | <kbd>Ctrl</kbd>+<kbd>/</kbd>                  | Switch to source code mode               |
 | `view.typewriter-mode`  | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd> | Enable typewriter mode                   |
 | `view.focus-mode`       | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>J</kbd> | Enable focus mode                        |
 | `view.toggle-sidebar`   | <kbd>Ctrl</kbd>+<kbd>J</kbd>                  | Toggle sidebar                           |
@@ -141,3 +141,4 @@ MarkText key bindings for Linux. Please see [general key bindings](KEYBINDINGS.m
 | ------------------------ | ---------------------------- | ----------------------------- |
 | `file.quick-open`        | <kbd>Ctrl</kbd>+<kbd>P</kbd> | Show quick open dialog        |
 | `file.quick-open-recent` | -                            | Show recent files and folders |
+| `file.quick-open-tabs`   | <kbd>Ctrl</kbd>+<kbd>E</kbd> | Switch to an open file        |

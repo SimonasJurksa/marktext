@@ -12,6 +12,7 @@ const COMMAND_KEY_MAP: Record<string, string> = {
   'file.add-folder': 'commands.file.addFolder',
   'file.quick-open': 'commands.file.quickOpen',
   'file.quick-open-recent': 'commands.file.quickOpenRecent',
+  'file.quick-open-tabs': 'commands.file.quickOpenTabs',
   'file.import-file': 'commands.file.importFile',
   'file.reveal-in-sidebar': 'commands.file.revealInSideBar',
 

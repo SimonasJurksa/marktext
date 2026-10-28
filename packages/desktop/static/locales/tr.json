@@ -303,7 +303,8 @@
       "selectOption": "Bir seçenek seçin",
       "searchFileToOpen": "Açılacak dosyayı arayın",
       "selectLanguage": "Geçilecek dili seçin",
-      "searchRecentFilesAndFolders": "Son kullanılan dosya ve klasörlerde ara"
+      "searchRecentFilesAndFolders": "Son kullanılan dosya ve klasörlerde ara",
+      "searchOpenTabs": "Search open files by name or content"
     },
     "recentlyOpened": "son kullanılanlar",
     "fileResults": "dosya sonuçları",
@@ -311,7 +312,10 @@
     "files": "dosyalar",
     "removeFromRecent": "Son kullanılanlardan kaldır",
     "noResults": "Eşleşen sonuç yok",
-    "noRecentFiles": "Son kullanılan dosya veya klasör yok"
+    "noRecentFiles": "Son kullanılan dosya veya klasör yok",
+    "openTabs": "open files",
+    "inOpenTabs": "matches in open files",
+    "noOpenTabs": "No open files"
   },
   "exportSettings": {
     "autoNumberingHeadings": "Başlıkları otomatik numaralandır",
@@ -858,6 +862,7 @@
       "renameFile": "Dosyayı Yeniden Adlandır",
       "quickOpen": "Hızlı Aç",
       "quickOpenRecent": "Son kullanılanları hızlı aç",
+      "quickOpenTabs": "Switch to Open File",
       "changeEncoding": "Kodlamayı Değiştir",
       "changeLineEnding": "Satır Sonunu Değiştir",
       "trailingNewline": "Sondaki Yeni Satır",

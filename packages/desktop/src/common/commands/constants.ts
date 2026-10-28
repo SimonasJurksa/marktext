@@ -34,6 +34,7 @@ const COMMANDS = Object.freeze({
   FILE_PRINT: 'file.print',
   FILE_QUICK_OPEN: 'file.quick-open',
   FILE_QUICK_OPEN_RECENT: 'file.quick-open-recent',
+  FILE_QUICK_OPEN_TABS: 'file.quick-open-tabs',
   FILE_QUIT: 'file.quit',
   FILE_RENAME_FILE: 'file.rename-file',
   FILE_SAVE: 'file.save',

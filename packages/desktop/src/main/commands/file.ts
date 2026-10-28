@@ -13,7 +13,14 @@ const openQuickOpenRecentDialog = (win: BrowserWindow | null | undefined): void 
   }
 }
 
+const openQuickOpenTabsDialog = (win: BrowserWindow | null | undefined): void => {
+  if (win && win.webContents) {
+    win.webContents.send('mt::execute-command-by-id', 'file.quick-open-tabs')
+  }
+}
+
 export const loadFileCommands = (commandManager: CommandManager): void => {
   commandManager.add(COMMANDS.FILE_QUICK_OPEN, openQuickOpenDialog as CommandCallback)
   commandManager.add(COMMANDS.FILE_QUICK_OPEN_RECENT, openQuickOpenRecentDialog as CommandCallback)
+  commandManager.add(COMMANDS.FILE_QUICK_OPEN_TABS, openQuickOpenTabsDialog as CommandCallback)
 }

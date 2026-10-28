@@ -303,7 +303,8 @@
       "selectOption": "Selecionar opção",
       "searchFileToOpen": "Pesquisar arquivo para abrir",
       "selectLanguage": "Selecionar idioma",
-      "searchRecentFilesAndFolders": "Pesquisar arquivos e pastas recentes"
+      "searchRecentFilesAndFolders": "Pesquisar arquivos e pastas recentes",
+      "searchOpenTabs": "Search open files by name or content"
     },
     "recentlyOpened": "abertos recentemente",
     "fileResults": "resultados de arquivos",
@@ -311,7 +312,10 @@
     "files": "arquivos",
     "removeFromRecent": "Remover dos abertos recentemente",
     "noResults": "Nenhum resultado correspondente",
-    "noRecentFiles": "Nenhum arquivo ou pasta recente"
+    "noRecentFiles": "Nenhum arquivo ou pasta recente",
+    "openTabs": "open files",
+    "inOpenTabs": "matches in open files",
+    "noOpenTabs": "No open files"
   },
   "exportSettings": {
     "autoNumberingHeadings": "Numeração automática de cabeçalhos",
@@ -858,6 +862,7 @@
       "renameFile": "Renomear Arquivo",
       "quickOpen": "Abertura Rápida",
       "quickOpenRecent": "Abertura rápida de recentes",
+      "quickOpenTabs": "Switch to Open File",
       "changeEncoding": "Alterar Codificação",
       "changeLineEnding": "Alterar Terminação de Linha",
       "trailingNewline": "Nova Linha Final",
