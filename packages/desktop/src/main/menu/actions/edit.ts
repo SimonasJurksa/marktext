@@ -120,6 +120,12 @@ export const editorReplace = (win: Win): void => {
   edit(win, 'replace')
 }
 
+export const findInFiles = (win: Win): void => {
+  if (win && win.webContents) {
+    win.webContents.send('mt::execute-command-by-id', COMMANDS.EDIT_FIND_IN_FILES)
+  }
+}
+
 export const answerPlanQuestions = (win: Win): void => {
   if (win && win.webContents) {
     win.webContents.send('mt::execute-command-by-id', COMMANDS.EDIT_ANSWER_PLAN_QUESTIONS)
@@ -176,6 +182,7 @@ export const loadEditCommands = (commandManager: CommandManager): void => {
   commandManager.add(COMMANDS.EDIT_FIND, editorFind)
   commandManager.add(COMMANDS.EDIT_FIND_IN_FOLDER, findInFolder)
   commandManager.add(COMMANDS.EDIT_ANSWER_PLAN_QUESTIONS, answerPlanQuestions)
+  commandManager.add(COMMANDS.EDIT_FIND_IN_FILES, findInFiles)
   commandManager.add(COMMANDS.EDIT_FIND_NEXT, editorFindNext)
   commandManager.add(COMMANDS.EDIT_FIND_PREVIOUS, editorFindPrevious)
   commandManager.add(COMMANDS.EDIT_PASTE, nativePaste)

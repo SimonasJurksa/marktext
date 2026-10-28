@@ -34,16 +34,18 @@ test.describe('Quick-insert accelerators (item 49)', () => {
     await placeCaretInEditor(page)
   })
 
-  const pressDesktopShortcut = async(keyCode: string) => {
+  const pressDesktopShortcut = async(keyCode: string, chordModifiers: string[] = modifiers) => {
     const window = await app.browserWindow(page)
     await window.evaluate((win, chord) => {
       win.webContents.sendInputEvent({ type: 'keyDown', ...chord })
       win.webContents.sendInputEvent({ type: 'keyUp', ...chord })
-    }, { keyCode, modifiers })
+    }, { keyCode, modifiers: chordModifiers })
   }
 
   test('the desktop code-block shortcut converts the empty paragraph', async() => {
-    await pressDesktopShortcut(isMac ? 'C' : 'K')
+    // This fork binds the code fence to Ctrl+Alt+K on Linux (Ctrl+Shift+K opens the plan wizard).
+    if (process.platform === 'linux') await pressDesktopShortcut('K', ['control', 'alt'])
+    else await pressDesktopShortcut(isMac ? 'C' : 'K')
 
     const codeBlock = page.locator('.editor-component pre.mu-code-block').first()
     await expect(codeBlock).toBeAttached({ timeout: 5000 })

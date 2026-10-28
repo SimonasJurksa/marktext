@@ -15,7 +15,7 @@ Status: 🚧 planned · ✅ done
 | Feature | Status |
 |---|---|
 | **Ctrl+E — switch to open file**: PhpStorm-style switcher over open tabs, filtered by name, path or content; a content hit jumps to the tab with Find prefilled | ✅ |
-| Folder search improvements (file names + content, ripgrep, no indexing) | 🚧 |
+| **Find in Files** (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd>): PhpStorm-style dialog that searches *any* directory (last used by default, browse button, 10-entry history) with a file mask (`*.md, *.txt, !*.min.js`), case / whole-word / regex toggles, multi-line queries (Shift+Enter, or `\n` in regex mode; CRLF tolerant), a full-file preview with the hit highlighted, and Enter to open the file at the match. Hidden and git-ignored files are searched too; results stop at 100 matches | ✅ |
 | Git change markers in the gutter and diff against `HEAD` | 🚧 |
 | Git blame for the current line / file | 🚧 |
 | **Plan questions**: documents using the `**K1. Question**` / `a) … b) …` / `Atsakymas:` template show an answered/total badge (red until complete, green when done) in the title bar and on the tab; **Ctrl+Shift+K** opens a wizard that walks through unanswered questions (letter keys pick an option, Enter moves on) and writes `a` or `a — comment` straight into the document | ✅ |
@@ -27,6 +27,8 @@ Status: 🚧 planned · ✅ done
 |---|---|---|
 | Switch to open file | — | <kbd>Ctrl</kbd>+<kbd>E</kbd> |
 | Source code mode | <kbd>Ctrl</kbd>+<kbd>E</kbd> | <kbd>Ctrl</kbd>+<kbd>/</kbd> |
+| Find in Files dialog | — | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd> |
+| Sidebar "Find in Folder" | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd> | unbound (still in the Edit menu and command palette) |
 | Answer plan questions (wizard) | — | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd> |
 | Insert code fence | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd> | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>K</kbd> |
 

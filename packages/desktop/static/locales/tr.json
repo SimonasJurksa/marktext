@@ -55,6 +55,7 @@
       "findNext": "Sonrakini Bul",
       "findPrevious": "Öncekini Bul",
       "findInFolder": "Klasörde Bul",
+      "findInFiles": "Find in Files…",
       "answerPlanQuestions": "Answer Plan Questions…",
       "screenshot": "Ekran Görüntüsü",
       "lineEnding": "Satır Sonu",
@@ -333,6 +334,24 @@
     "skip": "Skip",
     "next": "Next",
     "finish": "Finish"
+  },
+  "findInFiles": {
+    "title": "Find in Files",
+    "queryPlaceholder": "Text to find. Enter searches, Shift+Enter adds a line (matches across lines).",
+    "directory": "Directory",
+    "browse": "Choose directory…",
+    "fileMask": "File mask",
+    "fileMaskPlaceholder": "*.md, *.txt, !*.min.js — empty for all files",
+    "search": "Search",
+    "stop": "Stop",
+    "open": "Open",
+    "searching": "Searching…",
+    "limited": "Stopped at {count} matches. Narrow the search to see the rest.",
+    "noResults": "Nothing found",
+    "noDirectory": "Choose a directory first",
+    "invalidDirectory": "Directory does not exist: {path}",
+    "previewEmpty": "Select a result to preview it",
+    "previewTooLarge": "File is too large to preview"
   },
   "exportSettings": {
     "autoNumberingHeadings": "Başlıkları otomatik numaralandır",
@@ -915,6 +934,7 @@
       "findPrevious": "Öncekini Bul",
       "replace": "Değiştir",
       "findInFolder": "Klasörde Bul",
+      "findInFiles": "Find in Files",
       "answerPlanQuestions": "Answer Plan Questions",
       "screenshot": "Ekran Görüntüsü"
     },

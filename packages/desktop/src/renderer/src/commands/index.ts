@@ -235,6 +235,13 @@ const commands: CommandDescriptor[] = [
     }
   },
   {
+    id: 'edit.find-in-files',
+    execute: async() => {
+      await delay(150)
+      bus.emit('find-in-files::open')
+    }
+  },
+  {
     id: 'edit.answer-plan-questions',
     execute: async() => {
       await delay(150)

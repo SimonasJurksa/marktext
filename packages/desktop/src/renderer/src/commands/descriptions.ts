@@ -59,6 +59,7 @@ const COMMAND_KEY_MAP: Record<string, string> = {
   'edit.find-next': 'commands.edit.findNext',
   'edit.find-previous': 'commands.edit.findPrevious',
   'edit.replace': 'commands.edit.replace',
+  'edit.find-in-files': 'commands.edit.findInFiles',
   'edit.answer-plan-questions': 'commands.edit.answerPlanQuestions',
   'edit.find-in-folder': 'commands.edit.findInFolder',
 

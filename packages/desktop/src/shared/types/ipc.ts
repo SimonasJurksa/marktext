@@ -89,6 +89,7 @@ export interface IpcInvokeChannels {
   'mt::fs::path-exists': { args: [path: string]; ret: boolean }
   'mt::fs::read-file': { args: [path: string, encoding?: string]; ret: string | Uint8Array }
   'mt::fs::readdir': { args: [path: string]; ret: string[] }
+  'mt::fs::pick-directory': { args: [defaultPath?: string]; ret: string }
   'mt::fs::stat': { args: [path: string]; ret: SerializedStat }
   'mt::fs::unlink': { args: [path: string]; ret: void }
   'mt::fs::write-file': { args: [path: string, data: string | Uint8Array]; ret: void }

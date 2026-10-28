@@ -35,6 +35,7 @@
       <rename />
       <import-modal />
       <plan-wizard />
+      <find-in-files />
     </div>
   </div>
 </template>
@@ -54,6 +55,7 @@ import ExportSettingDialog from '@/components/exportSettings/index.vue'
 import Rename from '@/components/rename/index.vue'
 import ImportModal from '@/components/import/index.vue'
 import PlanWizard from '@/components/planWizard/index.vue'
+import FindInFiles from '@/components/findInFiles/index.vue'
 import bus from '@/bus'
 import { DEFAULT_STYLE } from '@/config'
 import { useLayoutStore } from '@/store/layout'

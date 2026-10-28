@@ -126,6 +126,7 @@ declare global {
     pathExists(p: string): Promise<boolean>
     unlink(p: string): Promise<void>
     readdir(p: string): Promise<string[]>
+    pickDirectory(defaultPath?: string): Promise<string>
     isExecutable(p: string): Promise<boolean>
     isChildOfDirectory(dir: string, child: string): boolean
     hasMarkdownExtension(filename: string): boolean

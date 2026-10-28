@@ -1,6 +1,6 @@
 import fs from 'fs-extra'
 import { type Stats } from 'fs'
-import { ipcMain } from 'electron'
+import { BrowserWindow, dialog, ipcMain } from 'electron'
 import {
   isFile as commonIsFile,
   isDirectory as commonIsDirectory,
@@ -63,6 +63,12 @@ export const registerFsHandlers = (): void => {
   ipcMain.handle('mt::fs::path-exists', (_e, p: string) => fs.pathExists(p))
   ipcMain.handle('mt::fs::unlink', (_e, p: string) => fs.unlink(p))
   ipcMain.handle('mt::fs::readdir', (_e, p: string) => fs.readdir(p))
+  ipcMain.handle('mt::fs::pick-directory', async(e, defaultPath?: string) => {
+    const win = BrowserWindow.fromWebContents(e.sender)
+    const options = { properties: ['openDirectory' as const], defaultPath: defaultPath || undefined }
+    const { filePaths } = win ? await dialog.showOpenDialog(win, options) : await dialog.showOpenDialog(options)
+    return filePaths?.[0] ?? ''
+  })
   // The same predicate the main process spawns by, or the preferences panel
   // green-ticks a cliScript that then fails with EACCES.
   ipcMain.handle('mt::fs::is-executable', (_e, p: string) => isExecutableFile(p))

@@ -9,6 +9,7 @@ const COMMANDS = Object.freeze({
   EDIT_DUPLICATE: 'edit.duplicate',
   EDIT_FIND: 'edit.find',
   EDIT_FIND_IN_FOLDER: 'edit.find-in-folder',
+  EDIT_FIND_IN_FILES: 'edit.find-in-files',
   EDIT_ANSWER_PLAN_QUESTIONS: 'edit.answer-plan-questions',
   EDIT_FIND_NEXT: 'edit.find-next',
   EDIT_FIND_PREVIOUS: 'edit.find-previous',

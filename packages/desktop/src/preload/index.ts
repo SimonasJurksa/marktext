@@ -178,6 +178,7 @@ const fileUtilsAPI = {
   pathExists: (p: string) => invoke('mt::fs::path-exists', p),
   unlink: (p: string) => invoke('mt::fs::unlink', p),
   readdir: (p: string) => invoke('mt::fs::readdir', p),
+  pickDirectory: (defaultPath?: string) => invoke('mt::fs::pick-directory', defaultPath),
   isExecutable: (p: string) => invoke('mt::fs::is-executable', p),
   isChildOfDirectory,
   hasMarkdownExtension,
