@@ -322,7 +322,7 @@
   "planQuestions": {
     "title": "Plan questions",
     "badgeTitle": "{answered} of {total} plan questions answered. Click to answer them.",
-    "noQuestions": "No plan questions found in this document. Expected lines like **K1. Question** followed by options a), b) … and an \"Atsakymas:\" line.",
+    "noQuestions": "No plan questions found in this document. Expected lines like **Q1. Question** followed by options a), b) … and an \"Answer:\" (or \"Atsakymas:\") line.",
     "readOnly": "This document is read-only; switch off reading mode to answer.",
     "recommended": "recommended",
     "comment": "Comment (optional, written as \"a — comment\")",

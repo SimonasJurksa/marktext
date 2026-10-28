@@ -22,3 +22,6 @@ playwright-report/
 .codex/
 .agents/
 .agent/
+
+# Personal working notes (plan files answered in the editor); not part of the fork.
+plans/

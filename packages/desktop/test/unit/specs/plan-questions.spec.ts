@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs'
+import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 import keybindingsLinux from 'main_renderer/keyboard/keybindingsLinux'
 import { formatAnswer, parsePlanQuestions, splitAnswer, writeAnswer } from '@/planQuestions'
@@ -70,6 +72,24 @@ describe('plan questions', () => {
     expect(k3!.options).toEqual([])
     expect(k3!.answered).toBe(true)
     expect(k3!.answer).toBe('Taip, tekstas kitoje eilutėje.')
+  })
+
+  it('accepts the English Answer keyword and keeps it when writing', () => {
+    const plan = '**Q1. Deploy on Friday?**\n\na) yes\nb) no\n\nAnswer:\n'
+    const { questions, answered, total } = parsePlanQuestions(plan)
+    expect(total).toBe(1)
+    expect(answered).toBe(0)
+    expect(questions[0]!.answerKeyword).toBe('Answer')
+    expect(writeAnswer(plan, questions[0]!, 'b').markdown).toBe('**Q1. Deploy on Friday?**\n\na) yes\nb) no\n\nAnswer: b\n')
+  })
+
+  it('parses the documented example plan', () => {
+    const example = readFileSync(path.resolve(__dirname, '../../../../../docs/examples/plan-example.md'), 'utf8')
+    const summary = parsePlanQuestions(example)
+    expect(summary.questions.map((q) => q.id)).toEqual(['Q1', 'Q2', 'Q3', 'Q4'])
+    expect(summary.answered).toBe(1)
+    expect(summary.questions[0]!.options.filter((o) => o.recommended).map((o) => o.letter)).toEqual(['a'])
+    expect(summary.questions[1]!.answer).toBe('a — the owner already writes the menu in Markdown')
   })
 
   it('returns an empty summary for documents without the template', () => {

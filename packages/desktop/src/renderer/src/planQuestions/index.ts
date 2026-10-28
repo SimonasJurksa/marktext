@@ -26,6 +26,8 @@ export interface PlanQuestion {
   options: PlanOption[]
   /** 0-based line index of the `Atsakymas:` line, or null when it is missing. */
   answerLine: number | null
+  /** Keyword used on the answer line (`Atsakymas` or `Answer`). */
+  answerKeyword: string
   /** 0-based line index of the last line belonging to this question. */
   endLine: number
   answer: string
@@ -40,9 +42,11 @@ export interface PlanSummary {
 
 export const QUESTION_RE = /^\*\*([A-Za-zĄČĘĖĮŠŲŪŽąčęėįšųūž]{1,4}\d+)\.\s*(.+?)\*\*\s*$/
 const OPTION_RE = /^([a-z])\)\s*(.*)$/
-const ANSWER_RE = /^Atsakymas:\s*(.*)$/
+// `Atsakymas:` is Lithuanian for `Answer:`; both keywords are accepted.
+const ANSWER_RE = /^(Atsakymas|Answer):\s*(.*)$/i
+export const DEFAULT_ANSWER_KEYWORD = 'Atsakymas'
 const BOUNDARY_RE = /^(---+\s*$|#{1,6}\s)/
-const RECOMMENDED_RE = /\(rekomenduojam[a-z]*\)/i
+const RECOMMENDED_RE = /\((rekomenduojam[a-z]*|recommended)\)/i
 
 const EMPTY: PlanSummary = Object.freeze({ questions: [], answered: 0, total: 0 }) as PlanSummary
 
@@ -54,7 +58,7 @@ const stripCr = (line: string): string => (line.endsWith('\r') ? line.slice(0, -
  * without an answer line.
  */
 export const parsePlanQuestions = (markdown: string | null | undefined): PlanSummary => {
-  if (!markdown || !markdown.includes('Atsakymas:')) return EMPTY
+  if (!markdown || !/(Atsakymas|Answer):/i.test(markdown)) return EMPTY
 
   const lines = markdown.split('\n').map(stripCr)
   const starts: number[] = []
@@ -89,6 +93,7 @@ const parseQuestion = (lines: string[], start: number, end: number): PlanQuestio
   const summary: string[] = []
   const options: PlanOption[] = []
   let answerLine: number | null = null
+  let answerKeyword = DEFAULT_ANSWER_KEYWORD
   const answerText: string[] = []
 
   for (let index = start + 1; index < end; index++) {
@@ -100,7 +105,8 @@ const parseQuestion = (lines: string[], start: number, end: number): PlanQuestio
     const answer = ANSWER_RE.exec(line)
     if (answer) {
       answerLine = index
-      answerText.push(answer[1] ?? '')
+      answerKeyword = answer[1] ?? DEFAULT_ANSWER_KEYWORD
+      answerText.push(answer[2] ?? '')
       continue
     }
     const option = OPTION_RE.exec(line)
@@ -130,6 +136,7 @@ const parseQuestion = (lines: string[], start: number, end: number): PlanQuestio
     summary: summary.join('\n').trim(),
     options,
     answerLine,
+    answerKeyword,
     endLine: end - 1,
     answer,
     answered: answer.length > 0
@@ -170,7 +177,7 @@ export const writeAnswer = (
   const rawLines = markdown.split('\n')
   const text = answer.trim()
   const render = (line: string | undefined): string =>
-    `Atsakymas:${text ? ` ${text}` : ''}${line?.endsWith('\r') ? '\r' : ''}`
+    `${question.answerKeyword}:${text ? ` ${text}` : ''}${line?.endsWith('\r') ? '\r' : ''}`
 
   if (question.answerLine !== null) {
     rawLines[question.answerLine] = render(rawLines[question.answerLine])
