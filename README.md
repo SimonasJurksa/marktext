@@ -163,11 +163,11 @@ All of them can be changed in *Preferences → Keybindings*.
 Download the `.deb` from [Releases](https://github.com/SimonasJurksa/marktext/releases) and run:
 
 ```sh
-wget https://github.com/SimonasJurksa/marktext/releases/download/v0.24.0-sj.4/marktext-linux-0.24.0-sj.4.deb
-sudo apt install ./marktext-linux-0.24.0-sj.4.deb
+wget https://github.com/SimonasJurksa/marktext/releases/download/v0.24.0-sj.5/marktext-linux-0.24.0-sj.5.deb
+sudo apt install ./marktext-linux-0.24.0-sj.5.deb
 ```
 
-Debian treats `0.24.0~sj.4` as *older* than upstream's `0.24.0~dev`; remove upstream first
+Debian treats `0.24.0~sj.5` as *older* than upstream's `0.24.0~dev`; remove upstream first
 (`sudo apt remove marktext`) if apt refuses to downgrade. The Git features need `git` installed.
 
 Releases are built by GitHub Actions (`.github/workflows/release.yml`, Linux x64 only): pushing a
@@ -206,6 +206,9 @@ Only the `deb` target is built; AppImage/snap/rpm were dropped from `electron-bu
 
 ## Release notes
 
+- **0.24.0-sj.5** — first build published on GitHub Releases; same features as sj.4, but the
+  native modules carry their own libstdc++, so the `.deb` installs on a stock Ubuntu 20.04 or
+  newer without GCC 13's runtime library.
 - **0.24.0-sj.4** — Git annotations (blame column in both modes, changes against HEAD, commit
   dialog, title-bar blame line, file tree colours); auto save is switched on once for preference
   files inherited from upstream.
