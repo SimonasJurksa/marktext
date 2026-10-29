@@ -25,7 +25,7 @@ interface TabsEditorState {
 type Match = { tabId: string; query: string | null }
 
 /**
- * PhpStorm-style "switch to open file" (Ctrl+E): lists only the tabs that are
+ * "Switch to open file" (Ctrl+E): lists only the tabs that are
  * open in this window and filters them by file name, path, or content.
  */
 class QuickOpenTabsCommand {
@@ -58,7 +58,7 @@ class QuickOpenTabsCommand {
     this._matches.clear()
     this.subcommands = tabs.map((tab) => this._toTabItem(tab))
     // Preselect the first tab that is not the active one, so Ctrl+E, Enter
-    // jumps away from the current document like in PhpStorm.
+    // jumps to the previous document.
     const currentId = currentFile && 'id' in currentFile ? currentFile.id : null
     const next = tabs.findIndex((tab) => tab.id !== currentId)
     this.subcommandSelectedIndex = next === -1 ? 0 : next

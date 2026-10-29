@@ -24,7 +24,7 @@ this fork changes.
 
 ### Switch to open file (Ctrl+E)
 
-A PhpStorm-style switcher that lists **only the files open in the current window**.
+A switcher that lists **only the files open in the current window**.
 
 - The next tab is preselected, so <kbd>Ctrl</kbd>+<kbd>E</kbd>, <kbd>Enter</kbd> jumps to the
   previous document.
@@ -91,7 +91,7 @@ save off again afterwards is respected.
 
 ### Find in Files (Ctrl+Shift+F)
 
-A PhpStorm-style *Find in Files* dialog that searches **any directory**, not only the open
+A *Find in Files* dialog that searches **any directory**, not only the open
 project (upstream's sidebar search stays available from *Edit → Find in Folder*, but is no longer
 bound to a key on Linux).
 
@@ -111,8 +111,8 @@ bound to a key on Linux).
 
 ### Git annotations (Ctrl+Alt+G)
 
-PhpStorm-style *Annotate*: who changed what, and what differs from the last commit, for any file
-inside a Git repository. Everything runs through the `git` command that Ubuntu already has; nothing
+Blame and change markers next to the text: who changed what, and what differs from the last
+commit, for any file inside a Git repository. Everything runs through the `git` command that Ubuntu already has; nothing
 else to install.
 
 - **Annotate column** — <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>G</kbd> (or *View → Git Annotate*)
@@ -128,8 +128,7 @@ else to install.
   changed.
 - **Title bar** — the commit of the block under the caret is summarised next to the word count
   (`author · 2 hours ago · subject`); clicking it opens the same dialog.
-- **File tree** — modified files are shown in blue, added or untracked files in green, like
-  PhpStorm's project view.
+- **File tree** — modified files are shown in blue, added or untracked files in green.
 - Data refreshes 1 s after you stop typing, on save, when the window regains focus, when another
   program (an agent) changes the file, and when switching tabs. The column state is remembered per
   window.
@@ -172,9 +171,10 @@ Debian treats `0.24.0~sj.4` as *older* than upstream's `0.24.0~dev`; remove upst
 (`sudo apt remove marktext`) if apt refuses to downgrade. The Git features need `git` installed.
 
 Releases are built by GitHub Actions (`.github/workflows/release.yml`, Linux x64 only): pushing a
-`v*` tag builds the `.deb` on an Ubuntu runner and publishes it with a `SHA256SUMS.txt`. The same
-workflow can be started by hand from the *Actions* tab for an existing tag. On a fresh fork, GitHub
-keeps workflows disabled until they are enabled once on the *Actions* tab.
+`v*` tag builds the `.deb` inside an Ubuntu 20.04 container, so the package runs on Ubuntu 20.04
+and newer, and publishes it with a `SHA256SUMS.txt`. The same workflow can be started by hand from
+the *Actions* tab for an existing tag. On a fresh fork, GitHub keeps workflows disabled until they
+are enabled once on the *Actions* tab.
 
 ## Build from source
 
@@ -187,7 +187,11 @@ On Ubuntu 20.04 specifically:
 sudo apt install libx11-dev libxkbfile-dev
 sudo add-apt-repository ppa:ubuntu-toolchain-r/test && sudo apt install g++-13
 export CC=gcc-13 CXX=g++-13
+export LDFLAGS="-static-libstdc++ -static-libgcc"
 ```
+
+The `LDFLAGS` line makes the native modules carry their own libstdc++; without it the `.deb` only
+runs on machines that also have GCC 13's runtime library.
 
 Then:
 

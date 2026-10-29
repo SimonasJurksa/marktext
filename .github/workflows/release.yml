@@ -30,7 +30,7 @@ env:
 jobs:
   validate:
     name: Validate tag
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Validate semver tag
         run: |
@@ -45,34 +45,49 @@ jobs:
   build:
     name: Build linux-x64
     needs: validate
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
+    # The native modules (keytar, native-keymap, ced) are compiled here and
+    # link against the build machine's glibc, so the build runs inside Ubuntu
+    # 20.04: the .deb then installs on 20.04 and on every newer release.
+    # Electron 45's V8 headers need GCC 13 (the runner's own 22.04 image stops
+    # at GCC 11), which 20.04 gets from the toolchain PPA; libstdc++ is linked
+    # statically so the target machine does not need GCC 13's runtime either.
+    container:
+      image: ubuntu:20.04
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      CC: gcc-13
+      CXX: g++-13
+      LDFLAGS: -static-libstdc++ -static-libgcc
     steps:
+      - name: Install build dependencies
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends software-properties-common ca-certificates curl git gnupg
+          add-apt-repository -y ppa:ubuntu-toolchain-r/test
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            g++-13 make binutils pkg-config python3 python3-distutils \
+            icnsutils graphicsmagick xz-utils unzip \
+            libx11-dev libxkbfile-dev libsecret-1-dev libfontconfig-dev
+
       - name: Check out Git repository
         uses: actions/checkout@v7.0.1
         with:
           ref: ${{ env.RELEASE_TAG }}
-
-      - name: Install Linux Build Dependencies
-        run: sudo apt-get update && sudo apt-get install -y icnsutils graphicsmagick xz-utils libx11-dev libxkbfile-dev gnome-keyring libsecret-1-dev libfontconfig-dev
-
-      - name: Install Python 3.12
-        uses: actions/setup-python@v7.0.0
-        with:
-          python-version: '3.12'
 
       - name: Setup pnpm + Node + dependencies
         uses: ./.github/actions/setup
         with:
           node-version: '24.14.1'
 
-      # Cache Electron binary; key on package.json so it busts when Electron version changes.
       - name: Cache Electron binary
         uses: actions/cache@v6.1.0
         with:
           path: ~/.cache/electron
-          key: electron-ubuntu-22.04-${{ hashFiles('package.json') }}
+          key: electron-linux-${{ hashFiles('packages/desktop/package.json') }}
           restore-keys: |
-            electron-ubuntu-22.04-
+            electron-linux-
 
       # Run the full postinstall: Electron binary download, patch-package,
       # electron-rebuild, and minify-locales.
@@ -88,6 +103,35 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # Guards the promise above: fail loudly if a native module in the .deb
+      # needs a glibc or libstdc++ symbol newer than Ubuntu 20.04 ships.
+      - name: Check native modules load on Ubuntu 20.04
+        run: |
+          set -euo pipefail
+          deb=$(ls dist/*.deb | head -n 1)
+          unpacked=$(mktemp -d)
+          dpkg-deb -x "$deb" "$unpacked"
+          newest_version() {
+            objdump -T "$1" | { grep -oE "$2_[0-9.]+" || true; } | sed "s/^$2_//" | sort -uV | tail -n 1
+          }
+          fail=0
+          while IFS= read -r node; do
+            for spec in GLIBC:2.31 GLIBCXX:3.4.28; do
+              prefix=${spec%%:*}
+              limit=${spec##*:}
+              newest=$(newest_version "$node" "$prefix")
+              if [ -z "$newest" ]; then
+                continue
+              fi
+              echo "${node#"$unpacked"}: ${prefix}_${newest}"
+              if [ "$(printf '%s\n%s\n' "$limit" "$newest" | sort -V | tail -n 1)" != "$limit" ]; then
+                echo "::error::${node#"$unpacked"} needs ${prefix}_${newest}; Ubuntu 20.04 ships ${prefix}_${limit}"
+                fail=1
+              fi
+            done
+          done < <(find "$unpacked" -name '*.node')
+          exit "$fail"
+
       - name: Upload artifact
         uses: actions/upload-artifact@v7.0.2
         with:
@@ -99,7 +143,7 @@ jobs:
   release:
     name: Publish GitHub Release
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # Per-job permissions REPLACE workflow-level ones, so re-declare
     # both: contents:write to publish the release, actions:read for
     # download-artifact's Actions API calls.
@@ -126,7 +170,7 @@ jobs:
         run: |
           deb=$(cd dist && ls *.deb | head -n 1)
           {
-            echo "Linux-only MarkText fork. Ubuntu/Debian x86_64 package built by GitHub Actions from tag \`${RELEASE_TAG}\`."
+            echo "Linux-only MarkText fork. Ubuntu/Debian x86_64 package built by GitHub Actions from tag \`${RELEASE_TAG}\`; runs on Ubuntu 20.04 and newer."
             echo ""
             echo "## Install"
             echo '```sh'

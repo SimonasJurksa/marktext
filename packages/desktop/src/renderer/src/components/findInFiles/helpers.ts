@@ -45,7 +45,7 @@ export const buildPattern = (query: string, isRegexp: boolean): { pattern: strin
 }
 
 /**
- * Parses a PhpStorm-style file mask (`*.md, *.txt, !*.min.js`) into ripgrep
+ * Parses a file mask (`*.md, *.txt, !*.min.js`) into ripgrep
  * inclusion and exclusion globs. An empty mask means every file.
  */
 export const parseFileMask = (mask: string): { inclusions: string[]; exclusions: string[] } => {
