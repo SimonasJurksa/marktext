@@ -164,11 +164,17 @@ All of them can be changed in *Preferences → Keybindings*.
 Download the `.deb` from [Releases](https://github.com/SimonasJurksa/marktext/releases) and run:
 
 ```sh
-sudo apt install ./marktext-linux-<version>.deb
+wget https://github.com/SimonasJurksa/marktext/releases/download/v0.24.0-sj.4/marktext-linux-0.24.0-sj.4.deb
+sudo apt install ./marktext-linux-0.24.0-sj.4.deb
 ```
 
-Debian treats `0.24.0~sj.3` as *older* than upstream's `0.24.0~dev`; remove upstream first
-(`sudo apt remove marktext`) if apt refuses to downgrade.
+Debian treats `0.24.0~sj.4` as *older* than upstream's `0.24.0~dev`; remove upstream first
+(`sudo apt remove marktext`) if apt refuses to downgrade. The Git features need `git` installed.
+
+Releases are built by GitHub Actions (`.github/workflows/release.yml`, Linux x64 only): pushing a
+`v*` tag builds the `.deb` on an Ubuntu runner and publishes it with a `SHA256SUMS.txt`. The same
+workflow can be started by hand from the *Actions* tab for an existing tag. On a fresh fork, GitHub
+keeps workflows disabled until they are enabled once on the *Actions* tab.
 
 ## Build from source
 
