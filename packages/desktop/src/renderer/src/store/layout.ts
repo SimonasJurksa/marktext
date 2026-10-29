@@ -153,6 +153,12 @@ export const useLayoutStore = defineStore('layout', () => {
         })
     } else if (entryName === 'showTabBar') {
       showTabBar.value = !showTabBar.value
+      // Persisted like the sidebar: the next window starts the way this one was left.
+      if (!managed.value)
+        preferencesStore.SET_SINGLE_PREFERENCE({
+          type: 'tabBarVisibility',
+          value: !!showTabBar.value
+        })
     }
     if (!managed.value) debouncedSendBufferedState()
   }

@@ -58,6 +58,10 @@ class EditorWindow extends BaseWindow {
   private _directoryToOpen: string | null
   private _filesToOpen: PendingFile[] | null
   private _markdownToOpen: string[] | null
+  // While the saved session loads, files asked for meanwhile wait: a tab
+  // opened earlier would be wiped when the session state lands.
+  private _restoringState: boolean
+  private _switchAfterRestore: { filePath: string; options: FileOpenOptions }[]
   // Root directory and file list that are currently opened. These lists are
   // used to find the best window to open new files in.
   readonly projectRoots: ProjectRoots
@@ -74,6 +78,8 @@ class EditorWindow extends BaseWindow {
     this._directoryToOpen = null
     this._filesToOpen = []
     this._markdownToOpen = [] // List of markdown strings or an empty string will open a new untitled tab
+    this._restoringState = false
+    this._switchAfterRestore = []
 
     this.projectRoots = new ProjectRoots({
       publish: snapshot => this.browserWindow?.webContents.send('mt::project-roots-changed', snapshot),
@@ -380,7 +386,11 @@ class EditorWindow extends BaseWindow {
             this._latestPreviewRequestId = null
           }
         }
-        browserWindow!.webContents.send('mt::switch-tab-by-file_path', filePath, options)
+        if (this._restoringState) {
+          this._switchAfterRestore.push({ filePath, options })
+        } else {
+          browserWindow!.webContents.send('mt::switch-tab-by-file_path', filePath, options)
+        }
         continue
       }
       if (!isPreview) this._openedFiles!.push(filePath)
@@ -396,7 +406,7 @@ class EditorWindow extends BaseWindow {
             this._pendingPreviewPaths.delete(filePath)
             if (previewRequestId !== this._latestPreviewRequestId) return
           }
-          if (this.lifecycle === WindowLifecycle.READY) {
+          if (this.lifecycle === WindowLifecycle.READY && !this._restoringState) {
             this._doOpenTab(rawDocument, options, selected)
           } else {
             this._filesToOpen!.push({ doc: rawDocument, options, selected })
@@ -596,12 +606,24 @@ class EditorWindow extends BaseWindow {
     this._filesToOpen!.length = 0
   }
 
+  // Opens what arrived while the session was loading, in the order it was asked for.
+  private _finishRestore(): void {
+    this._restoringState = false
+    if (this.lifecycle !== WindowLifecycle.READY) return
+    this._doOpenFilesToOpen()
+    for (const { filePath, options } of this._switchAfterRestore) {
+      this.browserWindow?.webContents.send('mt::switch-tab-by-file_path', filePath, options)
+    }
+    this._switchAfterRestore.length = 0
+  }
+
   private _restoreAllState(): void {
     if (this.lifecycle !== WindowLifecycle.READY) {
       throw new Error('Invalid state.')
     }
     const { browserWindow, bufferStoreInfo, _accessor } = this
     const { menu: appMenu, preferences } = _accessor
+    this._restoringState = true
 
     try {
       const bufferState = JSON.parse(
@@ -688,8 +710,12 @@ class EditorWindow extends BaseWindow {
             message: err.message
           })
         })
+        .finally(() => {
+          this._finishRestore()
+        })
     } catch (e) {
       log.error('Failed to restore editor state:', e)
+      this._finishRestore()
     }
   }
 }

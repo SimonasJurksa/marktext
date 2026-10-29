@@ -66,7 +66,13 @@ export interface LaunchOptions {
   preferences?: Record<string, unknown>
   // Extra files written into the throwaway user data directory before launch.
   userDataFiles?: Record<string, string>
+  // Reuse this user data directory instead of a throwaway one: a second launch
+  // then sees the session the first one saved. The caller removes it.
+  userDataDir?: string
 }
+
+// Higher than any FORK_DEFAULTS_VERSION the app will ever ship with.
+const SEEDED_FORK_DEFAULTS_VERSION = 1_000_000
 
 export const launchElectron = async(
   userArgs?: string[],
@@ -76,12 +82,15 @@ export const launchElectron = async(
   const executablePath = getElectronPath()
   // Pass project root as entry so Electron reads package.json and getAppPath() returns project root.
   // Passing out/main/index.js directly bypasses package.json and breaks __static path resolution.
-  const userDataDir = trackTempDir(getTempPath())
+  const userDataDir = options.userDataDir ?? trackTempDir(getTempPath())
   if (options.preferences) {
     fs.mkdirSync(userDataDir, { recursive: true })
+    // Seeded values are the spec's explicit choices: mark the file as already
+    // carrying every fork default so the one-time migration leaves them alone.
+    const seeded = { forkDefaultsVersion: SEEDED_FORK_DEFAULTS_VERSION, ...options.preferences }
     fs.writeFileSync(
       path.join(userDataDir, 'preferences.json'),
-      JSON.stringify(options.preferences, null, 2),
+      JSON.stringify(seeded, null, 2),
       'utf-8'
     )
   }

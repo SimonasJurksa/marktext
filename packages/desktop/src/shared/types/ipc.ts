@@ -209,6 +209,7 @@ export interface IpcSendChannels {
     defaultPath: string
   ]
   'mt::response-pandoc-export': [payload: PandocExportPayload]
+  'mt::reset-user-preferences': []
   'mt::response-print': []
   'mt::rg::cancel': [searchId: string]
   'mt::save-and-close-tabs': [tabs: unknown[]]

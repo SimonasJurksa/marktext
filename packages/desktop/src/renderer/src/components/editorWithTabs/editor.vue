@@ -1088,6 +1088,12 @@ const handleFindAction = (action: unknown) => {
   scrollToHighlight()
 }
 
+// The search bar sits where the format picker of a selection pops up; the
+// picker must go when the bar opens or it swallows the bar's clicks.
+const hideFloatToolsForSearch = (): void => {
+  editor.value?.hideAllFloatTools()
+}
+
 const handleUploadedImage = (url: unknown, deletionUrl?: unknown) => {
   insertImage(url)
   editorStore.SHOW_IMAGE_DELETION_URL(deletionUrl as string)
@@ -1856,6 +1862,8 @@ onMounted(() => {
   bus.on('searchValue', handleSearch)
   bus.on('replaceValue', handReplace)
   bus.on('find-action', handleFindAction)
+  bus.on('find', hideFloatToolsForSearch)
+  bus.on('replace', hideFloatToolsForSearch)
   bus.on('insert-image', insertImage)
   bus.on('image-uploaded', handleUploadedImage)
   bus.on('file-changed', handleFileChange)
@@ -2027,6 +2035,8 @@ onBeforeUnmount(() => {
   bus.off('searchValue', handleSearch)
   bus.off('replaceValue', handReplace)
   bus.off('find-action', handleFindAction)
+  bus.off('find', hideFloatToolsForSearch)
+  bus.off('replace', hideFloatToolsForSearch)
   bus.off('insert-image', insertImage)
   bus.off('image-uploaded', handleUploadedImage)
   bus.off('file-changed', handleFileChange)

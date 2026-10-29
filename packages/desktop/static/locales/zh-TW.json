@@ -637,6 +637,14 @@
           "russian": "Русский",
           "italian": "Italiano"
         }
+      },
+      "defaults": {
+        "title": "Fork defaults",
+        "description": "Put every setting back to the defaults this build ships with: auto save, visible tab bar and sidebar, custom title bar, session restore, files sorted by modification time. Keybindings are not affected.",
+        "button": "Restore all defaults",
+        "confirm": "Reset all settings to their defaults? Your current values are lost.",
+        "confirmButton": "Reset",
+        "cancel": "Cancel"
       }
     },
     "editor": {

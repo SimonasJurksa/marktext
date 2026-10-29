@@ -12,8 +12,31 @@ import bundled from '../../../static/preference.json'
 import schema from '@shared/preferences/schema.json'
 
 const rules: Record<string, PreferenceSchemaEntry> = schema
-// Bump when the fork changes a default that existing preference files should pick up once.
-export const FORK_DEFAULTS_VERSION = 1
+
+/**
+ * Defaults the fork changed after upstream, one step per version. A preference
+ * file records the last step applied to it (`forkDefaultsVersion`), so a file
+ * written by upstream or by an older fork build picks up the later steps once
+ * and the user's own choices made afterwards are left alone.
+ */
+const FORK_DEFAULT_STEPS: ReadonlyArray<Record<string, unknown>> = [
+  { autoSave: true, autoSaveDelay: 2000 },
+  {
+    sideBarVisibility: true,
+    tabBarVisibility: true,
+    titleBarStyle: 'custom',
+    startUpAction: 'restoreAll',
+    restoreLayoutState: true,
+    restoreEditors: true,
+    restoreViewState: true,
+    fileSortBy: 'modified',
+    fileSortOrder: 'desc'
+  }
+]
+export const FORK_DEFAULTS_VERSION = FORK_DEFAULT_STEPS.length
+
+export const forkDefaultsSince = (version: number): Record<string, unknown> =>
+  Object.assign({}, ...FORK_DEFAULT_STEPS.slice(Math.max(0, version)))
 const object = (value: unknown): value is Record<string, unknown> =>
   !!value && typeof value === 'object' && !Array.isArray(value)
 const accepts = (value: unknown, rule: Rule): boolean => {
@@ -46,6 +69,16 @@ export const preferenceDefaults = (dark = false): UserPreferences & Record<strin
   return defaults as UserPreferences & Record<string, unknown>
 }
 
+/** Every schema-known preference at its shipped default: what "restore all defaults" writes. */
+export const shippedDefaultsPatch = (dark = false): Record<string, unknown> => {
+  const defaults = preferenceDefaults(dark)
+  const patch: Record<string, unknown> = {}
+  for (const key of Object.keys(rules)) {
+    if (key in defaults) patch[key] = defaults[key]
+  }
+  return patch
+}
+
 /** Invalid files are kept read-only; valid files retain unknown keys without interpreting them. */
 export class PreferenceFile {
   readonly exists: boolean
@@ -66,12 +99,13 @@ export class PreferenceFile {
       options.write ??
       ((pathname, contents) => writeAtomic(pathname, contents, { encoding: 'utf8', mode: 0o600 }))
     let readOnly = false
-    let needsForkDefaults = false
+    let appliedForkVersion = FORK_DEFAULTS_VERSION
     try {
       const input: unknown = JSON.parse(readFileSync(this.pathname, 'utf8'))
       if (!object(input)) throw new Error('Invalid preferences')
       this.raw = input
-      needsForkDefaults = input.forkDefaultsVersion === undefined
+      appliedForkVersion =
+        typeof input.forkDefaultsVersion === 'number' ? input.forkDefaultsVersion : 0
       for (const [key, rule] of Object.entries(rules)) {
         if (accepts(input[key], rule) && input[key] !== undefined)
           this.value[key] = structuredClone(input[key])
@@ -80,14 +114,14 @@ export class PreferenceFile {
       readOnly = (error as NodeJS.ErrnoException).code !== 'ENOENT'
     }
     this.readOnly = readOnly
-    if (this.exists && !readOnly && needsForkDefaults) this.applyForkDefaults()
+    if (this.exists && !readOnly && appliedForkVersion < FORK_DEFAULTS_VERSION) {
+      this.applyForkDefaults(appliedForkVersion)
+    }
   }
 
-  // Files written by upstream MarkText carry upstream's `autoSave: false`; the
-  // fork turns auto save on once and records the version in the file.
-  private applyForkDefaults(): void {
+  private applyForkDefaults(fromVersion: number): void {
     this.raw.forkDefaultsVersion = FORK_DEFAULTS_VERSION
-    this.update({ autoSave: true, autoSaveDelay: 2000 })
+    this.update(forkDefaultsSince(fromVersion))
   }
 
   get(): UserPreferences & Record<string, unknown> {

@@ -200,12 +200,9 @@ class App {
       }
     }
 
-    // We should NOT restore the previous buffer or open a folder if the user just wants to double click to open a file
-    let isRestorePathway = false
+    // A launch that carries files should not also open the configured folder.
     if (_openFilesCache.length === 0) {
-      if (startUpAction === 'restoreAll') {
-        isRestorePathway = true
-      } else if (startUpAction === 'folder' && defaultDirectoryToOpen) {
+      if (startUpAction === 'folder' && defaultDirectoryToOpen) {
         const info = normalizeMarkdownPath(defaultDirectoryToOpen)
         if (info) {
           _openFilesCache.unshift(info as PathInfo)
@@ -325,23 +322,23 @@ class App {
     }
 
     const createWindow = (): void => {
-      if (isRestorePathway) {
-        const bufferStores = editorBufferStore.getAll()
-        const bufferStoreList = Object.values(bufferStores) as Array<{
-          id: string
-          filePath: string | null
-        }>
-        if (bufferStoreList.length === 0) {
-          this._createEditorWindow()
-          return
-        }
-
+      // With "restore all windows", a launch that carries files (a double click
+      // in the file manager, the CLI) still brings the previous session back
+      // and adds the files to it; the saved session is never discarded.
+      const restoreSession = startUpAction === 'restoreAll'
+      const bufferStoreList = restoreSession
+        ? (Object.values(editorBufferStore.getAll()) as Array<{ id: string; filePath: string | null }>)
+        : []
+      if (bufferStoreList.length) {
         bufferStoreList.forEach((bufferStoreInfo) => {
           this._createEditorWindow(null, [], [], {}, bufferStoreInfo)
         })
+        if (_openFilesCache.length) this._openFilesToOpen()
       } else if (_openFilesCache.length) {
-        // Discard clean saved buffers so later file-manager launches cannot restore duplicate windows.
-        editorBufferStore.clearBufferStoresWithAllSaved()
+        if (!restoreSession) {
+          // Discard clean saved buffers so later file-manager launches cannot restore duplicate windows.
+          editorBufferStore.clearBufferStoresWithAllSaved()
+        }
         this._openFilesToOpen()
       } else {
         this._createEditorWindow()

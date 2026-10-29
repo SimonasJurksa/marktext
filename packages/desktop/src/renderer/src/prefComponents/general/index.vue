@@ -238,6 +238,26 @@
         />
       </template>
     </compound>
+
+    <compound>
+      <template #head>
+        <h6 class="title">
+          {{ t('preferences.general.defaults.title') }}
+        </h6>
+      </template>
+      <template #children>
+        <div class="reset-defaults">
+          <span class="description">{{ t('preferences.general.defaults.description') }}</span>
+          <el-button
+            size="medium"
+            class="reset-defaults-button"
+            @click="resetToDefaults"
+          >
+            {{ t('preferences.general.defaults.button') }}
+          </el-button>
+        </div>
+      </template>
+    </compound>
   </div>
 </template>
 
@@ -245,6 +265,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
+import { ElMessageBox } from 'element-plus'
 import { usePreferencesStore } from '@/store/preferences'
 import type { PreferencesState } from '@/store/preferences'
 import Compound from '../common/compound/index.vue'
@@ -341,9 +362,32 @@ const onSelectChange = (type: keyof PreferencesState, value: unknown): void => {
 const selectDefaultDirectoryToOpen = (): void => {
   preferenceStore.SELECT_DEFAULT_DIRECTORY_TO_OPEN()
 }
+
+const resetToDefaults = async(): Promise<void> => {
+  const confirmed = await ElMessageBox.confirm(
+    t('preferences.general.defaults.confirm'),
+    t('preferences.general.defaults.title'),
+    {
+      confirmButtonText: t('preferences.general.defaults.confirmButton'),
+      cancelButtonText: t('preferences.general.defaults.cancel'),
+      type: 'warning'
+    }
+  ).then(() => true, () => false)
+  if (confirmed) window.electron.ipcRenderer.send('mt::reset-user-preferences')
+}
 </script>
 
 <style scoped>
+.pref-general .reset-defaults {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 14px;
+}
+.pref-general .reset-defaults-button {
+  flex: none;
+}
 .pref-general .startup-action-ctrl div {
   display: flex;
   align-items: center;

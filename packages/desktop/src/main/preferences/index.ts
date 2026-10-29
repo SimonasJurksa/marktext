@@ -3,7 +3,7 @@ import log from 'electron-log'
 import { isWindows } from '../config'
 import { onInternalChannel } from '../utils/internalIpc'
 import { TypedEmitter } from '@shared/types/typedEmitter'
-import { PreferenceFile } from './preferenceFile'
+import { PreferenceFile, shippedDefaultsPatch } from './preferenceFile'
 import type { PreferenceUpdateResult, UserPreferences } from '@shared/types/preferences'
 
 type PreferenceEvents = Record<string, unknown[]>
@@ -51,6 +51,11 @@ class Preference extends TypedEmitter<PreferenceEvents> {
     if (result.status === 'failed') log.warn(`Cannot persist preferences: ${result.reason}`)
   }
 
+  /** Writes every preference back to its shipped default; keybindings live elsewhere and stay. */
+  resetToDefaults(): void {
+    this.setItems(shippedDefaultsPatch(nativeTheme.shouldUseDarkColors))
+  }
+
   getPreferredEol(): 'lf' | 'crlf' {
     const endOfLine = this.getItem<string>('endOfLine')
     if (endOfLine === 'lf') {
@@ -76,6 +81,9 @@ class Preference extends TypedEmitter<PreferenceEvents> {
     })
     ipcMain.on('mt::set-user-preference', (_e, settings: Record<string, unknown>) => {
       this.setItems(settings)
+    })
+    ipcMain.on('mt::reset-user-preferences', () => {
+      this.resetToDefaults()
     })
     ipcMain.on('mt::cmd-toggle-autosave', () => {
       this.setItem('autoSave', !this.getItem('autoSave'))

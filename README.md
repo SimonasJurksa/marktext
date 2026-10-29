@@ -17,7 +17,7 @@ this fork changes.
 |---|---|
 | [Switch to open file](#switch-to-open-file-ctrle) (<kbd>Ctrl</kbd>+<kbd>E</kbd>) | ✅ since 0.24.0-sj.1 |
 | [Plan questions: badge and answer wizard](#plan-questions-badge-and-answer-wizard-ctrlshiftk) (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd>) | ✅ since 0.24.0-sj.2 |
-| [Auto save on by default](#auto-save-on-by-default) | ✅ since 0.24.0-sj.2 |
+| [Fork defaults: auto save, tab bar, sidebar, session restore, newest files first](#fork-defaults) | ✅ since 0.24.0-sj.2, extended in sj.7 |
 | [Find in Files](#find-in-files-ctrlshiftf) (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd>) | ✅ since 0.24.0-sj.3 |
 | [Git annotations: blame, changes, commit details](#git-annotations-ctrlaltg) (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>G</kbd>) | ✅ since 0.24.0-sj.4 |
 | [Back and forward through editing places](#back-and-forward-mouse-side-buttons-ctrlaltleftright) (mouse side buttons, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>←</kbd>/<kbd>→</kbd>) | ✅ since 0.24.0-sj.6 |
@@ -83,14 +83,33 @@ What you get:
 The code fence shortcut that upstream had on <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd> moved
 to <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>K</kbd>.
 
-### Auto save on by default
+### Fork defaults
 
-Agents read files from disk, so unsaved edits are invisible to them. Auto save is enabled by
-default with a 2 s delay (upstream: off, 5 s). Both can still be changed in *Preferences → General*.
+The fork ships with the settings a plan-review workflow needs, so a fresh install needs no
+configuration:
 
-A `preferences.json` written by upstream MarkText keeps its own `autoSave: false`, so the fork
-switches it on once on first start and records `forkDefaultsVersion` in the file. Turning auto
-save off again afterwards is respected.
+| Setting | Fork | Upstream |
+|---|---|---|
+| Auto save (agents read files from disk, unsaved edits are invisible to them) | on, 2 s | off, 5 s |
+| Tab bar | shown | hidden |
+| Sidebar | shown | hidden |
+| Title bar | in-app (custom) | in-app (custom) |
+| On startup | restore all windows, files, layout and caret positions | same |
+| File tree order | by modification time, newest first | by creation time, oldest first |
+
+Every one of them can still be changed in *Preferences*. A `preferences.json` written by upstream
+MarkText or by an older fork build is brought up to these defaults **once** on the next start
+(the file records `forkDefaultsVersion`); choices made after that are respected. *Preferences →
+General → Fork defaults → Restore all defaults* puts every setting back to the table above
+(keybindings are kept).
+
+Two upstream behaviours that fought these defaults were changed as well:
+
+- *View → Toggle Tab Bar* now writes `tabBarVisibility`, like the sidebar toggle always did, so a
+  hidden or shown tab bar survives a restart.
+- Launching MarkText with a file (double click in the file manager, `marktext note.md`) used to
+  throw the saved session away and open only that file. With *Restore all windows* the previous
+  session comes back and the file is added to it.
 
 ### Find in Files (Ctrl+Shift+F)
 
@@ -203,11 +222,11 @@ All of them can be changed in *Preferences → Keybindings*.
 Download the `.deb` from [Releases](https://github.com/SimonasJurksa/marktext/releases) and run:
 
 ```sh
-wget https://github.com/SimonasJurksa/marktext/releases/download/v0.24.0-sj.6/marktext-linux-0.24.0-sj.6.deb
-sudo apt install ./marktext-linux-0.24.0-sj.6.deb
+wget https://github.com/SimonasJurksa/marktext/releases/download/v0.24.0-sj.7/marktext-linux-0.24.0-sj.7.deb
+sudo apt install ./marktext-linux-0.24.0-sj.7.deb
 ```
 
-Debian treats `0.24.0~sj.6` as *older* than upstream's `0.24.0~dev`; remove upstream first
+Debian treats `0.24.0~sj.7` as *older* than upstream's `0.24.0~dev`; remove upstream first
 (`sudo apt remove marktext`) if apt refuses to downgrade. The Git features need `git` installed.
 
 Releases are built by GitHub Actions (`.github/workflows/release.yml`, Linux x64 only): pushing a
@@ -246,6 +265,10 @@ Only the `deb` target is built; AppImage/snap/rpm were dropped from `electron-bu
 
 ## Release notes
 
+- **0.24.0-sj.7** — fork defaults extended (tab bar and sidebar shown, session restore, files
+  newest first) with a one-time migration of existing preference files and a *Restore all
+  defaults* button; the tab bar toggle is persisted; launching with a file no longer discards
+  the saved session.
 - **0.24.0-sj.6** — back/forward navigation through editing places (mouse side buttons,
   <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>←</kbd>/<kbd>→</kbd>); double left <kbd>Shift</kbd> opens
   the file search; plan status dots in the file tree; empty folders hidden.
