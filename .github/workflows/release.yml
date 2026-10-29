@@ -10,6 +10,11 @@ on:
     # (e.g. `vbad.tag`) instead of them silently not triggering anything.
     tags:
       - 'v*'
+    # Pushing a `ci/...` branch exercises the build and the compatibility
+    # check without publishing anything: a CI change can be tried without
+    # spending a version number.
+    branches:
+      - 'ci/**'
   workflow_dispatch:
     inputs:
       tag:
@@ -35,6 +40,10 @@ jobs:
       - name: Validate semver tag
         run: |
           tag="${RELEASE_TAG}"
+          if [[ "${GITHUB_REF}" == refs/heads/* ]]; then
+            echo "Branch build of '${tag}': the .deb is built and checked, nothing is released."
+            exit 0
+          fi
           # SemVer 2.0.0 with leading "v"
           if ! [[ "$tag" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]]; then
             echo "::error::Tag '$tag' is not a valid semver (expected vX.Y.Z[-prerelease][+build])"
@@ -103,35 +112,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Guards the promise above: fail loudly if a native module in the .deb
-      # needs a glibc or libstdc++ symbol newer than Ubuntu 20.04 ships.
-      - name: Check native modules load on Ubuntu 20.04
-        run: |
-          set -euo pipefail
-          deb=$(ls dist/*.deb | head -n 1)
-          unpacked=$(mktemp -d)
-          dpkg-deb -x "$deb" "$unpacked"
-          newest_version() {
-            objdump -T "$1" | { grep -oE "$2_[0-9.]+" || true; } | sed "s/^$2_//" | sort -uV | tail -n 1
-          }
-          fail=0
-          while IFS= read -r node; do
-            for spec in GLIBC:2.31 GLIBCXX:3.4.28; do
-              prefix=${spec%%:*}
-              limit=${spec##*:}
-              newest=$(newest_version "$node" "$prefix")
-              if [ -z "$newest" ]; then
-                continue
-              fi
-              echo "${node#"$unpacked"}: ${prefix}_${newest}"
-              if [ "$(printf '%s\n%s\n' "$limit" "$newest" | sort -V | tail -n 1)" != "$limit" ]; then
-                echo "::error::${node#"$unpacked"} needs ${prefix}_${newest}; Ubuntu 20.04 ships ${prefix}_${limit}"
-                fail=1
-              fi
-            done
-          done < <(find "$unpacked" -name '*.node')
-          exit "$fail"
-
       - name: Upload artifact
         uses: actions/upload-artifact@v7.0.2
         with:
@@ -140,9 +120,58 @@ jobs:
           if-no-files-found: error
           path: dist/*.deb
 
+      # Guards the promise above: fail if a native module in the .deb needs a
+      # glibc or libstdc++ symbol newer than Ubuntu 20.04 ships. Every failure
+      # is reported as an `::error::` annotation, because the step log itself
+      # is only readable by repository admins.
+      - name: Check native modules load on Ubuntu 20.04
+        shell: bash
+        run: |
+          set -eu
+          shopt -s nullglob
+          trap 'echo "::error::check aborted at line ${LINENO}: ${BASH_COMMAND}"' ERR
+          debs=(dist/*.deb)
+          if [ "${#debs[@]}" -eq 0 ]; then
+            echo "::error::no .deb found in dist/ ($(ls -m dist 2>&1))"
+            exit 1
+          fi
+          unpacked=$(mktemp -d)
+          dpkg-deb -x "${debs[0]}" "$unpacked"
+          mapfile -t nodes < <(find "$unpacked" -name '*.node' | sort)
+          if [ "${#nodes[@]}" -eq 0 ]; then
+            echo "::error::no native modules found inside ${debs[0]}"
+            exit 1
+          fi
+          {
+            echo "## Native modules in ${debs[0]##*/}"
+            echo ""
+            echo "| Module | GLIBC | GLIBCXX |"
+            echo "|---|---|---|"
+          } >> "$GITHUB_STEP_SUMMARY"
+          fail=0
+          for node in "${nodes[@]}"; do
+            name=${node#"$unpacked"}
+            glibc=$(objdump -T "$node" 2>/dev/null | grep -oE 'GLIBC_[0-9.]+' | sed 's/^GLIBC_//' | sort -uV | tail -n 1 || true)
+            glibcxx=$(objdump -T "$node" 2>/dev/null | grep -oE 'GLIBCXX_[0-9.]+' | sed 's/^GLIBCXX_//' | sort -uV | tail -n 1 || true)
+            echo "${name}: GLIBC ${glibc:--} GLIBCXX ${glibcxx:--}"
+            echo "| \`${name}\` | ${glibc:--} | ${glibcxx:--} |" >> "$GITHUB_STEP_SUMMARY"
+            for check in "GLIBC:2.31:${glibc}" "GLIBCXX:3.4.28:${glibcxx}"; do
+              IFS=: read -r prefix limit newest <<< "$check"
+              if [ -z "$newest" ]; then
+                continue
+              fi
+              if [ "$(printf '%s\n%s\n' "$limit" "$newest" | sort -V | tail -n 1)" != "$limit" ]; then
+                echo "::error::${name} needs ${prefix}_${newest}; Ubuntu 20.04 ships ${prefix}_${limit}"
+                fail=1
+              fi
+            done
+          done
+          exit "$fail"
+
   release:
     name: Publish GitHub Release
     needs: build
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
     # Per-job permissions REPLACE workflow-level ones, so re-declare
     # both: contents:write to publish the release, actions:read for
