@@ -28,6 +28,8 @@ test.describe('New File on a collapsed folder (#3439)', () => {
   test.beforeAll(async() => {
     root = fs.mkdtempSync(path.join(os.tmpdir(), 'marktext-collapsed-folder-'))
     fs.mkdirSync(path.join(root, 'nested'))
+    // The tree hides folders without files, so give nested/ one to be listed.
+    fs.writeFileSync(path.join(root, 'nested', 'inside.md'), '# Inside\n', 'utf-8')
     const launched = await launchElectron([root], {
       preferences: { sideBarVisibility: true, restoreLayoutState: true }
     })

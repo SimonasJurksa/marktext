@@ -133,7 +133,9 @@
       "showDeveloperTools": "Mostrar Ferramentas de Desenvolvedor",
       "reloadWindow": "Recarregar Janela",
       "gitAnnotate": "Git Annotate (Blame and Changes)",
-      "gitCommitAtCursor": "Show Git Commit for Current Line"
+      "gitCommitAtCursor": "Show Git Commit for Current Line",
+      "navigateBack": "Back",
+      "navigateForward": "Forward"
     },
     "format": {
       "format": "Formato",
@@ -269,7 +271,9 @@
       "folderAlreadyAdded": "This folder has already been added.",
       "fileOutsideFolders": "This file is not in an added folder.",
       "sessionSaveFailed": "Unable to save session",
-      "resizeOpenedFiles": "Redimensionar a lista de arquivos abertos"
+      "resizeOpenedFiles": "Redimensionar a lista de arquivos abertos",
+      "showEmptyFolders": "Show empty folders",
+      "planProgress": "{answered} of {total} plan questions answered"
     },
     "toc": {
       "expand": "Expandir sumário",
@@ -1008,7 +1012,9 @@
       "actualSize": "Tamanho real",
       "devToggleDeveloperTools": "Alternar ferramentas de desenvolvedor",
       "toggleGitAnnotate": "View: Toggle Git annotations (blame and changes)",
-      "gitCommitAtCursor": "View: Show Git commit for the current line"
+      "gitCommitAtCursor": "View: Show Git commit for the current line",
+      "navigateBack": "Go back to the previous editing place",
+      "navigateForward": "Go forward to the next editing place"
     },
     "tabs": {
       "cycleForward": "Ciclar para Frente",

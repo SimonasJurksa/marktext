@@ -22,6 +22,12 @@
       @keypress.enter="rename"
     >
     <span v-else>{{ file.name }}</span>
+    <span
+      v-if="planStatus"
+      class="plan-dot"
+      :class="planStatus.answered === planStatus.total ? 'done' : 'pending'"
+      :title="t('sideBar.tree.planProgress', planStatus)"
+    />
   </div>
 </template>
 
@@ -32,6 +38,8 @@ import { useProjectStore } from '@/store/project'
 import { useEditorStore } from '@/store/editor'
 import { usePreferencesStore } from '@/store/preferences'
 import { useGitStore } from '@/store/git'
+import { usePlanStore } from '@/store/plan'
+import { t } from '../../i18n'
 import FileIcon from './icon.vue'
 import { showContextMenu } from '../../contextMenu/sideBar'
 import bus from '../../bus'
@@ -49,7 +57,10 @@ const editorStore = useEditorStore()
 const preferencesStore = usePreferencesStore()
 const gitStore = useGitStore()
 
+const planStore = usePlanStore()
+
 const gitStatus = computed(() => gitStore.fileStatus(props.file.pathname))
+const planStatus = computed(() => planStore.fileStatus(props.file.pathname))
 
 const fileEl = ref<HTMLDivElement | null>(null)
 const renameInput = ref<HTMLInputElement | null>(null)
@@ -121,7 +132,10 @@ onMounted(() => {
     fileEl.value.addEventListener('contextmenu', (event) => {
       event.preventDefault()
       projectStore.CHANGE_ACTIVE_ITEM(props.file)
-      showContextMenu(event, !!clipboard.value)
+      showContextMenu(event, !!clipboard.value, {
+        shown: projectStore.showEmptyFolders,
+        toggle: () => projectStore.TOGGLE_EMPTY_FOLDERS()
+      })
     })
   }
 
@@ -176,6 +190,20 @@ onBeforeUnmount(() => {
 }
 .side-bar-file.active > span {
   color: var(--sideBarTitleColor);
+}
+/* Plan progress: red while questions are open, green once all are answered. */
+.plan-dot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  margin-left: 6px;
+  border-radius: 50%;
+}
+.plan-dot.pending {
+  background: #e5484d;
+}
+.plan-dot.done {
+  background: #30a46c;
 }
 input.rename {
   height: 22px;

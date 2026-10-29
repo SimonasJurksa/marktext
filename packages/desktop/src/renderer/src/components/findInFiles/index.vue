@@ -213,6 +213,7 @@ import { useEditorStore } from '@/store/editor'
 import { useProjectStore } from '@/store/project'
 import { usePreferencesStore } from '@/store/preferences'
 import RipgrepDirectorySearcher from '@/node/ripgrepSearcher'
+import { openFileAtCursor } from '@/navigation/openAt'
 import {
   FIND_IN_FILES_LIMIT,
   buildPattern,
@@ -268,7 +269,7 @@ const { t } = useI18n()
 const editorStore = useEditorStore()
 const projectStore = useProjectStore()
 const preferencesStore = usePreferencesStore()
-const { currentFile, tabs } = storeToRefs(editorStore)
+const { currentFile } = storeToRefs(editorStore)
 const { availableRoots } = storeToRefs(projectStore)
 const { searchMaxFileSize } = storeToRefs(preferencesStore)
 
@@ -522,23 +523,11 @@ const moveSelection = (delta: number): void => {
 }
 
 const openMatch = (filePath: string, range: SearchMatch['range']): void => {
-  const cursor = {
+  openFileAtCursor(filePath, {
     isCollapsed: range[0][0] !== range[1][0],
     anchor: { line: range[0][0], ch: range[0][1] },
     focus: { line: range[1][0], ch: range[1][1] }
-  }
-  const openedTab = tabs.value.find((file) => window.fileUtils.isSamePathSync(file.pathname, filePath))
-  if (openedTab) {
-    openedTab.cursor = cursor
-    if (currentFile.value !== openedTab) {
-      editorStore.UPDATE_CURRENT_FILE(openedTab)
-    } else {
-      const { id, markdown, history: fileHistory } = openedTab
-      bus.emit('file-changed', { id, markdown, cursor, renderCursor: true, history: fileHistory })
-    }
-  } else {
-    window.electron.ipcRenderer.send('mt::open-file', filePath, { cursor })
-  }
+  })
 }
 
 const openSelected = (): void => {

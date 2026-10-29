@@ -20,6 +20,9 @@ this fork changes.
 | [Auto save on by default](#auto-save-on-by-default) | ✅ since 0.24.0-sj.2 |
 | [Find in Files](#find-in-files-ctrlshiftf) (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd>) | ✅ since 0.24.0-sj.3 |
 | [Git annotations: blame, changes, commit details](#git-annotations-ctrlaltg) (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>G</kbd>) | ✅ since 0.24.0-sj.4 |
+| [Back and forward through editing places](#back-and-forward-mouse-side-buttons-ctrlaltleftright) (mouse side buttons, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>←</kbd>/<kbd>→</kbd>) | ✅ since 0.24.0-sj.6 |
+| [Double Shift opens the file search](#double-shift-find-a-file) | ✅ since 0.24.0-sj.6 |
+| [File tree: plan status dots, empty folders hidden](#file-tree-plan-status-dots-and-empty-folders) | ✅ since 0.24.0-sj.6 |
 | Git: changed-files panel, revert hunk / file | 🚧 planned |
 
 ### Switch to open file (Ctrl+E)
@@ -137,6 +140,41 @@ Limitations of this first iteration: read-only (no stage, commit or revert), no 
 files beyond the tree colours, and the WYSIWYG mapping is per block, so a one-word change still
 marks the whole paragraph.
 
+### Back and forward (mouse side buttons, Ctrl+Alt+Left/Right)
+
+MarkText remembers the places you edited, the way an IDE does, and the *back* / *forward* side
+buttons of a mouse (or <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>←</kbd> / <kbd>→</kbd>, *View → Back /
+Forward*) walk through them.
+
+- A place is a file plus a line. A new entry is recorded whenever you land in another file (tab,
+  file tree, <kbd>Ctrl</kbd>+<kbd>E</kbd>, <kbd>Ctrl</kbd>+<kbd>P</kbd>, Find in Files, the plan
+  wizard) and whenever the caret jumps more than 10 lines inside the same file. Smaller caret
+  moves only update the current entry, so *back* returns to where you worked, not to the previous
+  line.
+- Works in both WYSIWYG and source code mode; in WYSIWYG the caret lands on the block that
+  contains the line.
+- A place in a file you have closed since is reopened at the same spot. Places in untitled
+  buffers disappear when the buffer is closed.
+- Going back and then editing somewhere else drops the forward history, like a browser.
+
+### Double Shift: find a file
+
+Two quick taps of the **left** <kbd>Shift</kbd> open the project-wide file search
+(<kbd>Ctrl</kbd>+<kbd>P</kbd>: files by name in the open folders plus recently opened files). The
+second tap has to come within 300 ms, each press must be short, and any other key in between
+cancels the gesture, so typing capital letters never triggers it.
+
+### File tree: plan status dots and empty folders
+
+- Every Markdown file with [plan questions](#plan-questions-badge-and-answer-wizard-ctrlshiftk)
+  shows a dot after its name in the file tree and in the *Opened files* list: **red** while
+  questions are still open, **green** when all are answered. Hover for `3 of 5 plan questions
+  answered`. Files that are open are counted from the editor buffer (unsaved answers count
+  immediately); everything else is read from disk and refreshed when the file changes.
+- Folders that contain no listed file, directly or in any subfolder, are hidden. *Show empty
+  folders* in the tree's right-click menu lists them again (remembered per machine). A folder you
+  create from the tree stays visible while it is still empty.
+
 ## Changed keybindings (Linux)
 
 | Action | Upstream | This fork |
@@ -148,6 +186,8 @@ marks the whole paragraph.
 | Answer plan questions | — | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd> |
 | Insert code fence | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd> | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>K</kbd> |
 | Git annotations (blame and changes) | — | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>G</kbd> |
+| Back / forward through editing places | — | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>←</kbd> / <kbd>→</kbd>, mouse side buttons |
+| Project-wide file search | <kbd>Ctrl</kbd>+<kbd>P</kbd> | <kbd>Ctrl</kbd>+<kbd>P</kbd> or double <kbd>Shift</kbd> (left) |
 
 All of them can be changed in *Preferences → Keybindings*.
 
@@ -163,11 +203,11 @@ All of them can be changed in *Preferences → Keybindings*.
 Download the `.deb` from [Releases](https://github.com/SimonasJurksa/marktext/releases) and run:
 
 ```sh
-wget https://github.com/SimonasJurksa/marktext/releases/download/v0.24.0-sj.5/marktext-linux-0.24.0-sj.5.deb
-sudo apt install ./marktext-linux-0.24.0-sj.5.deb
+wget https://github.com/SimonasJurksa/marktext/releases/download/v0.24.0-sj.6/marktext-linux-0.24.0-sj.6.deb
+sudo apt install ./marktext-linux-0.24.0-sj.6.deb
 ```
 
-Debian treats `0.24.0~sj.5` as *older* than upstream's `0.24.0~dev`; remove upstream first
+Debian treats `0.24.0~sj.6` as *older* than upstream's `0.24.0~dev`; remove upstream first
 (`sudo apt remove marktext`) if apt refuses to downgrade. The Git features need `git` installed.
 
 Releases are built by GitHub Actions (`.github/workflows/release.yml`, Linux x64 only): pushing a
@@ -206,6 +246,9 @@ Only the `deb` target is built; AppImage/snap/rpm were dropped from `electron-bu
 
 ## Release notes
 
+- **0.24.0-sj.6** — back/forward navigation through editing places (mouse side buttons,
+  <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>←</kbd>/<kbd>→</kbd>); double left <kbd>Shift</kbd> opens
+  the file search; plan status dots in the file tree; empty folders hidden.
 - **0.24.0-sj.5** — first build published on GitHub Releases; same features as sj.4, but the
   native modules carry their own libstdc++, so the `.deb` installs on a stock Ubuntu 20.04 or
   newer without GCC 13's runtime library.

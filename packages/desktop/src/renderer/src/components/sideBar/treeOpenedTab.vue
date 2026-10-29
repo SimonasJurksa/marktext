@@ -23,6 +23,12 @@
       </el-icon>
     </button>
     <span class="name">{{ file.filename }}</span>
+    <span
+      v-if="planStatus(file)"
+      class="plan-dot"
+      :class="planStatus(file)!.answered === planStatus(file)!.total ? 'done' : 'pending'"
+      :title="progressTitle(planStatus(file)!)"
+    />
   </div>
 </template>
 
@@ -30,7 +36,9 @@
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 import { useEditorStore } from '@/store/editor'
+import { usePlanStore } from '@/store/plan'
 import { Close } from '@element-plus/icons-vue'
+import type { PlanFileStatus } from '@shared/types/plan'
 import type { TabDescriptor } from './types'
 
 defineProps<{
@@ -39,8 +47,15 @@ defineProps<{
 
 const { t } = useI18n()
 const editorStore = useEditorStore()
+const planStore = usePlanStore()
 
 const { currentFile } = storeToRefs(editorStore)
+
+const planStatus = (file: TabDescriptor): PlanFileStatus | null =>
+  file.pathname ? planStore.fileStatus(file.pathname) : null
+
+const progressTitle = (status: PlanFileStatus): string =>
+  t('sideBar.tree.planProgress', { answered: status.answered, total: status.total })
 
 const selectFile = (file: TabDescriptor): void => {
   if (file.id !== currentFile.value?.id) {
@@ -103,6 +118,19 @@ const removeFileInTab = (file: TabDescriptor): void => {
 }
 .opened-file.active {
   color: var(--highlightThemeColor);
+}
+.plan-dot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  margin-left: 6px;
+  border-radius: 50%;
+}
+.plan-dot.pending {
+  background: #e5484d;
+}
+.plan-dot.done {
+  background: #30a46c;
 }
 .opened-file.preview > .name {
   font-style: italic;

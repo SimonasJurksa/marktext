@@ -143,7 +143,7 @@
             }}
           </div>
           <folder
-            v-for="folder of root.tree.folders"
+            v-for="folder of listedFolders(root.tree.folders)"
             :key="folder.id"
             :folder="folder"
             :depth="depth"
@@ -221,6 +221,9 @@ import { MIN_VISIBLE_ROWS, useOpenedFilesResize } from './useOpenedFilesResize'
 import IconTooltip from '@/components/iconTooltip/index.vue'
 import bus from '../../bus'
 import { showRootContextMenu } from '../../contextMenu/sideBar'
+import { visibleFolders } from './emptyFolders'
+import { useFolderVisibility } from './useFolderVisibility'
+import type { TreeFolderNode } from './types'
 import type { RootView } from '@/store/project'
 import { useI18n } from 'vue-i18n'
 import { ArrowRight } from '@element-plus/icons-vue'
@@ -254,6 +257,9 @@ const rowRegistry: TreeRowRegistry = new Map()
 provide(TREE_ROW_REGISTRY_KEY, rowRegistry)
 
 const projectStore = useProjectStore()
+const folderVisibility = useFolderVisibility()
+const listedFolders = (folders: TreeFolderNode[]): TreeFolderNode[] =>
+  visibleFolders(folders, folderVisibility.value)
 const editorStore = useEditorStore()
 const layoutStore = useLayoutStore()
 const legacyOpenedFiles = ref(
@@ -342,7 +348,8 @@ const handleRootContextMenu = (
     },
     () => {
       void window.electron.ipcRenderer.invoke('mt::project-retry-root', root.key)
-    }
+    },
+    { shown: projectStore.showEmptyFolders, toggle: () => projectStore.TOGGLE_EMPTY_FOLDERS() }
   )
 }
 

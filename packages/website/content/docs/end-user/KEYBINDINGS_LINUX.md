@@ -113,6 +113,8 @@ MarkText key bindings for Linux. Please see [general key bindings](KEYBINDINGS.m
 | `view.toggle-tabbar`    | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> | Toggle tabbar                            |
 | `view.toggle-toc`       | <kbd>Ctrl</kbd>+<kbd>K</kbd>                  | Toggle table of contents                 |
 | `view.toggle-git-annotate` | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>G</kbd> | Toggle Git annotations (blame and changes) |
+| `view.navigate-back` | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Left</kbd> | Go back to the previous editing place (also the mouse back button) |
+| `view.navigate-forward` | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Right</kbd> | Go forward to the next editing place (also the mouse forward button) |
 | `view.toggle-dev-tools` | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>I</kbd>   | Toggle developer tools (debug mode only) |
 | `view.dev-reload`       | <kbd>Ctrl</kbd>+<kbd>F5</kbd>                 | Reload window (debug mode only)          |
 | `view.reload-images`    | <kbd>F5</kbd>                                 | Reload images                            |

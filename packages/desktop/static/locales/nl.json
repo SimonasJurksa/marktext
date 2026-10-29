@@ -133,7 +133,9 @@
       "showDeveloperTools": "Ontwikkelaarshulpmiddelen tonen",
       "reloadWindow": "Venster herladen",
       "gitAnnotate": "Git Annotate (Blame and Changes)",
-      "gitCommitAtCursor": "Show Git Commit for Current Line"
+      "gitCommitAtCursor": "Show Git Commit for Current Line",
+      "navigateBack": "Back",
+      "navigateForward": "Forward"
     },
     "format": {
       "format": "Opmaak",
@@ -269,7 +271,9 @@
       "folderAlreadyAdded": "This folder has already been added.",
       "fileOutsideFolders": "This file is not in an added folder.",
       "sessionSaveFailed": "Unable to save session",
-      "resizeOpenedFiles": "Lijst met geopende bestanden aanpassen"
+      "resizeOpenedFiles": "Lijst met geopende bestanden aanpassen",
+      "showEmptyFolders": "Show empty folders",
+      "planProgress": "{answered} of {total} plan questions answered"
     },
     "toc": {
       "expand": "Inhoudsopgave uitklappen",
@@ -1008,7 +1012,9 @@
       "actualSize": "Werkelijke grootte",
       "devToggleDeveloperTools": "Ontwikkelaarshulpmiddelen in-/uitschakelen",
       "toggleGitAnnotate": "View: Toggle Git annotations (blame and changes)",
-      "gitCommitAtCursor": "View: Show Git commit for the current line"
+      "gitCommitAtCursor": "View: Show Git commit for the current line",
+      "navigateBack": "Go back to the previous editing place",
+      "navigateForward": "Go forward to the next editing place"
     },
     "tabs": {
       "cycleForward": "Volgende tabblad",

@@ -133,7 +133,9 @@
       "showDeveloperTools": "개발자 도구 보기",
       "reloadWindow": "창 새로고침",
       "gitAnnotate": "Git Annotate (Blame and Changes)",
-      "gitCommitAtCursor": "Show Git Commit for Current Line"
+      "gitCommitAtCursor": "Show Git Commit for Current Line",
+      "navigateBack": "Back",
+      "navigateForward": "Forward"
     },
     "format": {
       "format": "서식",
@@ -269,7 +271,9 @@
       "folderAlreadyAdded": "This folder has already been added.",
       "fileOutsideFolders": "This file is not in an added folder.",
       "sessionSaveFailed": "Unable to save session",
-      "resizeOpenedFiles": "열린 파일 목록 크기 조절"
+      "resizeOpenedFiles": "열린 파일 목록 크기 조절",
+      "showEmptyFolders": "Show empty folders",
+      "planProgress": "{answered} of {total} plan questions answered"
     },
     "toc": {
       "expand": "목차 펼치기",
@@ -1008,7 +1012,9 @@
       "actualSize": "실제 크기",
       "devToggleDeveloperTools": "개발자 도구 전환",
       "toggleGitAnnotate": "View: Toggle Git annotations (blame and changes)",
-      "gitCommitAtCursor": "View: Show Git commit for the current line"
+      "gitCommitAtCursor": "View: Show Git commit for the current line",
+      "navigateBack": "Go back to the previous editing place",
+      "navigateForward": "Go forward to the next editing place"
     },
     "tabs": {
       "cycleForward": "앞으로 순환",

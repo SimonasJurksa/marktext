@@ -133,7 +133,9 @@
       "showDeveloperTools": "顯示開發者工具",
       "reloadWindow": "重新載入視窗",
       "gitAnnotate": "Git Annotate (Blame and Changes)",
-      "gitCommitAtCursor": "Show Git Commit for Current Line"
+      "gitCommitAtCursor": "Show Git Commit for Current Line",
+      "navigateBack": "Back",
+      "navigateForward": "Forward"
     },
     "format": {
       "format": "格式",
@@ -269,7 +271,9 @@
       "folderAlreadyAdded": "此資料夾已加入。",
       "fileOutsideFolders": "此檔案不在已加入的資料夾中。",
       "sessionSaveFailed": "無法儲存工作階段",
-      "resizeOpenedFiles": "調整已開啟檔案清單的大小"
+      "resizeOpenedFiles": "調整已開啟檔案清單的大小",
+      "showEmptyFolders": "Show empty folders",
+      "planProgress": "{answered} of {total} plan questions answered"
     },
     "toc": {
       "expand": "展開目錄",
@@ -1008,7 +1012,9 @@
       "actualSize": "實際大小",
       "devToggleDeveloperTools": "切換開發者工具",
       "toggleGitAnnotate": "View: Toggle Git annotations (blame and changes)",
-      "gitCommitAtCursor": "View: Show Git commit for the current line"
+      "gitCommitAtCursor": "View: Show Git commit for the current line",
+      "navigateBack": "Go back to the previous editing place",
+      "navigateForward": "Go forward to the next editing place"
     },
     "tabs": {
       "cycleForward": "向前循環",

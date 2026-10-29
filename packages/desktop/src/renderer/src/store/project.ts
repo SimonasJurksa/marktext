@@ -76,6 +76,16 @@ const isWithinRoot = (root: string, pathname: string): boolean => {
   )
 }
 
+const SHOW_EMPTY_FOLDERS_KEY = 'tree:show-empty-folders'
+
+const readShowEmptyFolders = (): boolean => {
+  try {
+    return localStorage.getItem(SHOW_EMPTY_FOLDERS_KEY) === 'true'
+  } catch {
+    return false
+  }
+}
+
 const visitFolders = (tree: TreeFolderNode, visit: (folder: TreeFolderNode) => void): void => {
   visit(tree)
   for (const folder of tree.folders) visitFolders(folder, visit)
@@ -110,6 +120,11 @@ export const useProjectStore = defineStore('project', () => {
   const nameInputValue = ref<string>('')
   const clipboard = ref<ClipboardEntry | null>(null)
   const restoringSession = ref(false)
+  // Folders without listed files stay hidden unless this is on; kept per machine.
+  const showEmptyFolders = ref(readShowEmptyFolders())
+  // Folders created from the tree this session: listed while still empty, so
+  // the row the user just made does not vanish.
+  const pinnedFolders = ref(new Set<string>())
   const roots = ref<RootView[]>([])
   const availableRoots = computed(() => roots.value.filter((root) => root.status === 'ready'))
   const projectTree = computed<ProjectTree | null>({
@@ -628,6 +643,7 @@ export const useProjectStore = defineStore('project', () => {
     }
 
     const fullName = dirname + PATH_SEPARATOR + name
+    if (type !== 'file') pinnedFolders.value.add(fullName)
 
     try {
       // Creating over an existing path would silently overwrite it (outputFile
@@ -692,6 +708,15 @@ export const useProjectStore = defineStore('project', () => {
     window.electron.ipcRenderer.send('mt::open-setting-window')
   }
 
+  function TOGGLE_EMPTY_FOLDERS(): void {
+    showEmptyFolders.value = !showEmptyFolders.value
+    try {
+      localStorage.setItem(SHOW_EMPTY_FOLDERS_KEY, String(showEmptyFolders.value))
+    } catch {
+      // Private mode or blocked storage: the choice simply lasts the session.
+    }
+  }
+
   return {
     activeItem,
     createCache,
@@ -701,6 +726,9 @@ export const useProjectStore = defineStore('project', () => {
     clipboard,
     projectTree,
     restoringSession,
+    showEmptyFolders,
+    pinnedFolders,
+    TOGGLE_EMPTY_FOLDERS,
     roots,
     availableRoots,
     FIND_ROOT,

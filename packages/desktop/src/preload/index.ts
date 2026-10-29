@@ -234,6 +234,10 @@ const gitAPI = {
   commit: (root: string, sha: string) => invoke('mt::git::commit', root, sha)
 }
 
+const planAPI = {
+  status: (pathnames: string[]) => invoke('mt::plan::status', pathnames)
+}
+
 const uploaderAPI = {
   uploadImage: (req: unknown) => invoke('mt::uploader::upload', req)
 }
@@ -303,6 +307,7 @@ try {
   contextBridge.exposeInMainWorld('i18nUtils', i18nAPI)
   contextBridge.exposeInMainWorld('ripgrep', ripgrepAPI)
   contextBridge.exposeInMainWorld('git', gitAPI)
+  contextBridge.exposeInMainWorld('plan', planAPI)
   contextBridge.exposeInMainWorld('uploader', uploaderAPI)
   contextBridge.exposeInMainWorld('fonts', fontsAPI)
   contextBridge.exposeInMainWorld('diagram', diagramAPI)

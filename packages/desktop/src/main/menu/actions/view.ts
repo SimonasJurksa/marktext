@@ -69,6 +69,14 @@ export const showGitCommitAtCursor = (win: Win): void => {
   win?.webContents.send('mt::execute-command-by-id', COMMANDS.VIEW_GIT_COMMIT_AT_CURSOR)
 }
 
+export const navigateBack = (win: Win): void => {
+  win?.webContents.send('mt::execute-command-by-id', COMMANDS.VIEW_NAVIGATE_BACK)
+}
+
+export const navigateForward = (win: Win): void => {
+  win?.webContents.send('mt::execute-command-by-id', COMMANDS.VIEW_NAVIGATE_FORWARD)
+}
+
 export const reloadImageCache = (win: Win): void => {
   if (win && win.webContents) {
     win.webContents.send('mt::invalidate-image-cache')
@@ -93,6 +101,8 @@ export const loadViewCommands = (commandManager: CommandManager): void => {
   commandManager.add(COMMANDS.VIEW_TYPEWRITER_MODE, toggleTypewriterMode)
   commandManager.add(COMMANDS.VIEW_TOGGLE_GIT_ANNOTATE, toggleGitAnnotate)
   commandManager.add(COMMANDS.VIEW_GIT_COMMIT_AT_CURSOR, showGitCommitAtCursor)
+  commandManager.add(COMMANDS.VIEW_NAVIGATE_BACK, navigateBack)
+  commandManager.add(COMMANDS.VIEW_NAVIGATE_FORWARD, navigateForward)
 
   commandManager.add(COMMANDS.VIEW_DEV_RELOAD, debugReloadWindow)
   commandManager.add(COMMANDS.VIEW_TOGGLE_DEV_TOOLS, debugToggleDevTools)

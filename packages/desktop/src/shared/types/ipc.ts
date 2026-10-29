@@ -1,5 +1,6 @@
 import type { ProjectRootsSnapshot, ProjectTreeEvent } from './project'
 import type { GitAnnotation, GitCommitDetails, GitRootStatus } from './git'
+import type { PlanFileStatus } from './plan'
 /**
  * Cross-process IPC contract: invoke returns a Promise, send is fire-and-forget,
  * sync returns directly, and main events push payloads to renderer listeners.
@@ -100,6 +101,7 @@ export interface IpcInvokeChannels {
   }
   'mt::git::status': { args: [pathname: string]; ret: GitRootStatus | null }
   'mt::git::commit': { args: [root: string, sha: string]; ret: GitCommitDetails | null }
+  'mt::plan::status': { args: [pathnames: string[]]; ret: Record<string, PlanFileStatus> }
   'mt::i18n::is-supported': { args: [lang: string]; ret: boolean }
   'mt::i18n::load': { args: [language: string]; ret: Record<string, unknown> }
   'mt::i18n::supported': { args: []; ret: string[] }

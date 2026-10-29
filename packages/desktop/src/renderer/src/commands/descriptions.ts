@@ -128,6 +128,8 @@ const COMMAND_KEY_MAP: Record<string, string> = {
   'view.toggle-toc': 'commands.view.toggleToc',
   'view.toggle-git-annotate': 'commands.view.toggleGitAnnotate',
   'view.git-commit-at-cursor': 'commands.view.gitCommitAtCursor',
+  'view.navigate-back': 'commands.view.navigateBack',
+  'view.navigate-forward': 'commands.view.navigateForward',
 
   'view.toggle-source-code-mode': 'commands.view.toggleSourceCodeMode',
   'view.source-code-mode': 'commands.view.sourceCodeMode',

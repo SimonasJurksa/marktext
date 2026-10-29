@@ -20,6 +20,8 @@ test.describe('Sidebar name input commits on click-away (#3207)', () => {
     fs.writeFileSync(path.join(projectDir, 'second.md'), '# Second\n', 'utf-8')
     fs.writeFileSync(path.join(projectDir, 'third.md'), '# Third\n', 'utf-8')
     fs.mkdirSync(path.join(projectDir, 'docs'))
+    // The tree hides folders without files, so give docs/ one to be listed.
+    fs.writeFileSync(path.join(projectDir, 'docs', 'inside.md'), '# Inside\n', 'utf-8')
 
     const launched = await launchElectron([projectDir])
     app = launched.app

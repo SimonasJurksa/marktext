@@ -34,7 +34,7 @@
       class="folder-contents"
     >
       <tree-folder
-        v-for="childFolder of folder.folders"
+        v-for="childFolder of childFolders"
         :key="childFolder.id"
         :folder="childFolder"
         :depth="depth + 1"
@@ -66,6 +66,8 @@ import { showContextMenu } from '../../contextMenu/sideBar'
 import bus from '../../bus'
 import File from './treeFile.vue'
 import { ArrowRight } from '@element-plus/icons-vue'
+import { visibleFolders } from './emptyFolders'
+import { useFolderVisibility } from './useFolderVisibility'
 import type { TreeFolderNode } from './types'
 
 const props = defineProps<{
@@ -93,6 +95,9 @@ const { createCache } = storeToRefs(projectStore)
 const { nameInputValue } = storeToRefs(projectStore)
 const { activeItem } = storeToRefs(projectStore)
 const { clipboard } = storeToRefs(projectStore)
+
+const folderVisibility = useFolderVisibility()
+const childFolders = computed(() => visibleFolders(props.folder.folders, folderVisibility.value))
 
 const handleInputFocus = (): void => {
   // Expand the create target before waiting for its input to mount.
@@ -134,7 +139,10 @@ onMounted(() => {
     folderEl.value.addEventListener('contextmenu', (event) => {
       event.preventDefault()
       projectStore.CHANGE_ACTIVE_ITEM(props.folder)
-      showContextMenu(event, !!clipboard.value)
+      showContextMenu(event, !!clipboard.value, {
+        shown: projectStore.showEmptyFolders,
+        toggle: () => projectStore.TOGGLE_EMPTY_FOLDERS()
+      })
     })
   }
   bus.on('SIDEBAR::show-new-input', handleInputFocus)

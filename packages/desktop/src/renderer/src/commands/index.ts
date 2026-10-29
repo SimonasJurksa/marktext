@@ -261,6 +261,18 @@ const commands: CommandDescriptor[] = [
       bus.emit('git-commit::open-at-cursor')
     }
   },
+  {
+    id: 'view.navigate-back',
+    execute: async() => {
+      bus.emit('navigation::back')
+    }
+  },
+  {
+    id: 'view.navigate-forward',
+    execute: async() => {
+      bus.emit('navigation::forward')
+    }
+  },
 
 
   {

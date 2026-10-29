@@ -68,6 +68,9 @@ import { useCommandCenterStore } from '@/store/commandCenter'
 import { useProjectStore } from '@/store/project'
 import { useAutoUpdatesStore } from '@/store/autoUpdates'
 import { useNotificationStore } from '@/store/notification'
+import { useNavigationStore } from '@/store/navigation'
+import { usePlanStore } from '@/store/plan'
+import { DoubleTapDetector } from '@/keyboard/doubleTap'
 
 const mainStore = useMainStore()
 const editorStore = useEditorStore()
@@ -78,6 +81,19 @@ const listenForMainStore = useListenForMainStore()
 const autoUpdateStore = useAutoUpdatesStore()
 const commandCenterStore = useCommandCenterStore()
 const notificationStore = useNotificationStore()
+// Created for their watchers: editing-place history and plan status of the file tree.
+useNavigationStore()
+usePlanStore()
+
+// Two quick taps of the left Shift open the project-wide file search (Ctrl+P).
+const doubleShift = new DoubleTapDetector('ShiftLeft')
+const handleShiftKeyDown = (event: KeyboardEvent): void => {
+  doubleShift.keyDown(event, event.timeStamp)
+}
+const handleShiftKeyUp = (event: KeyboardEvent): void => {
+  const completed = doubleShift.keyUp(event, event.timeStamp)
+  if (completed) bus.emit('cmd::execute', 'file.quick-open')
+}
 
 const timer = ref<ReturnType<typeof setTimeout> | null>(null)
 
@@ -184,9 +200,15 @@ const setupDragDropHandler = (): void => {
 }
 
 let stopSidebarContextMenu: (() => void) | undefined
-onUnmounted(() => stopSidebarContextMenu?.())
+onUnmounted(() => {
+  stopSidebarContextMenu?.()
+  window.removeEventListener('keydown', handleShiftKeyDown, true)
+  window.removeEventListener('keyup', handleShiftKeyUp, true)
+})
 
 onMounted(async () => {
+  window.addEventListener('keydown', handleShiftKeyDown, true)
+  window.addEventListener('keyup', handleShiftKeyUp, true)
   if (window.marktext?.initialState) {
     preferencesStore.SET_USER_PREFERENCE(window.marktext.initialState)
   }

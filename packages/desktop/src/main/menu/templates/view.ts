@@ -101,6 +101,20 @@ export default function(keybindings: Keybindings): MenuItemConstructorOptions {
       }
     },
     {
+      label: t('menu.view.navigateBack'),
+      accelerator: keybindings.getAccelerator('view.navigate-back') ?? undefined,
+      click(_item, focusedWindow) {
+        actions.navigateBack(focusedWindow as BrowserWindow | undefined)
+      }
+    },
+    {
+      label: t('menu.view.navigateForward'),
+      accelerator: keybindings.getAccelerator('view.navigate-forward') ?? undefined,
+      click(_item, focusedWindow) {
+        actions.navigateForward(focusedWindow as BrowserWindow | undefined)
+      }
+    },
+    {
       label: t('menu.view.reloadImages'),
       accelerator: keybindings.getAccelerator('view.reload-images') ?? undefined,
       click(_item, focusedWindow) {

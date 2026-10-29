@@ -3,6 +3,7 @@ import { registerFsHandlers } from './fs'
 import { registerPathHandlers } from './paths'
 import { registerRipgrepHandlers } from './ripgrep'
 import { registerGitHandlers } from './git'
+import { registerPlanHandlers } from './plan'
 import { registerUploaderHandlers } from './uploader'
 import { registerFontsHandlers } from './fonts'
 import { registerShellHandlers } from './shell'
@@ -20,6 +21,7 @@ export const registerSandboxIpcHandlers = (): void => {
   registerPathHandlers()
   registerRipgrepHandlers()
   registerGitHandlers()
+  registerPlanHandlers()
   registerUploaderHandlers()
   registerFontsHandlers()
   registerShellHandlers()

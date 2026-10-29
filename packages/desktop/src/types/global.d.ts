@@ -13,6 +13,7 @@ import type {
 import type { MenuTemplate, MenuPopupPosition } from '@shared/types/menu'
 import type { SerializedStat } from '@shared/types/files'
 import type { GitAnnotation, GitCommitDetails, GitRootStatus } from '@shared/types/git'
+import type { PlanFileStatus } from '@shared/types/plan'
 
 declare global {
   const MARKTEXT_VERSION: string
@@ -171,6 +172,10 @@ declare global {
     commit(root: string, sha: string): Promise<GitCommitDetails | null>
   }
 
+  interface PlanAPI {
+    status(pathnames: string[]): Promise<Record<string, PlanFileStatus>>
+  }
+
   interface RipgrepAPI {
     start(req: unknown): Promise<{ searchId: string }>
     cancel(searchId: string): void
@@ -207,6 +212,7 @@ declare global {
     i18nUtils: I18nUtilsAPI
     ripgrep: RipgrepAPI
     git: GitAPI
+    plan: PlanAPI
     uploader: UploaderAPI
     fonts: FontsAPI
     diagram: DiagramAPI

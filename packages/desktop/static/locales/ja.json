@@ -133,7 +133,9 @@
       "showDeveloperTools": "開発者ツールの表示",
       "reloadWindow": "ウィンドウの再読み込み",
       "gitAnnotate": "Git Annotate (Blame and Changes)",
-      "gitCommitAtCursor": "Show Git Commit for Current Line"
+      "gitCommitAtCursor": "Show Git Commit for Current Line",
+      "navigateBack": "Back",
+      "navigateForward": "Forward"
     },
     "format": {
       "format": "フォーマット",
@@ -269,7 +271,9 @@
       "folderAlreadyAdded": "This folder has already been added.",
       "fileOutsideFolders": "This file is not in an added folder.",
       "sessionSaveFailed": "Unable to save session",
-      "resizeOpenedFiles": "開いているファイル一覧のサイズを変更"
+      "resizeOpenedFiles": "開いているファイル一覧のサイズを変更",
+      "showEmptyFolders": "Show empty folders",
+      "planProgress": "{answered} of {total} plan questions answered"
     },
     "toc": {
       "expand": "目次を展開",
@@ -1008,7 +1012,9 @@
       "actualSize": "実際のサイズ",
       "devToggleDeveloperTools": "開発者ツールの切り替え",
       "toggleGitAnnotate": "View: Toggle Git annotations (blame and changes)",
-      "gitCommitAtCursor": "View: Show Git commit for the current line"
+      "gitCommitAtCursor": "View: Show Git commit for the current line",
+      "navigateBack": "Go back to the previous editing place",
+      "navigateForward": "Go forward to the next editing place"
     },
     "tabs": {
       "cycleForward": "前方に循環",

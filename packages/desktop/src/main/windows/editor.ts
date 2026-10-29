@@ -253,6 +253,16 @@ class EditorWindow extends BaseWindow {
       this.emit('window-blur')
       win!.webContents.send('mt::window-active-status', { status: false })
     })
+
+    // The side buttons of a mouse reach the window as app commands on Linux
+    // and Windows; they drive the editing-place history, not page history.
+    win.on('app-command', (_event, command) => {
+      if (command === 'browser-backward') {
+        win!.webContents.send('mt::execute-command-by-id', 'view.navigate-back')
+      } else if (command === 'browser-forward') {
+        win!.webContents.send('mt::execute-command-by-id', 'view.navigate-forward')
+      }
+    })
     ;(['maximize', 'unmaximize', 'enter-full-screen', 'leave-full-screen'] as const).forEach(
       (channel) => {
         // Electron's BrowserWindow.on() is heavily overloaded — the union of
