@@ -36,6 +36,7 @@
       <import-modal />
       <plan-wizard />
       <find-in-files />
+      <git-commit-dialog />
     </div>
   </div>
 </template>
@@ -56,6 +57,7 @@ import Rename from '@/components/rename/index.vue'
 import ImportModal from '@/components/import/index.vue'
 import PlanWizard from '@/components/planWizard/index.vue'
 import FindInFiles from '@/components/findInFiles/index.vue'
+import GitCommitDialog from '@/components/gitAnnotate/commitDialog.vue'
 import bus from '@/bus'
 import { DEFAULT_STYLE } from '@/config'
 import { useLayoutStore } from '@/store/layout'

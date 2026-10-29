@@ -131,7 +131,9 @@
       "toggleTableOfContents": "İçindekileri göster",
       "reloadImages": "Görselleri Yeniden Yükle",
       "showDeveloperTools": "Geliştirici Araçlarını Göster",
-      "reloadWindow": "Pencereyi Yeniden Yükle"
+      "reloadWindow": "Pencereyi Yeniden Yükle",
+      "gitAnnotate": "Git Annotate (Blame and Changes)",
+      "gitCommitAtCursor": "Show Git Commit for Current Line"
     },
     "format": {
       "format": "Biçim",
@@ -1004,7 +1006,9 @@
       "reloadImages": "Görselleri Yeniden Yükle",
       "textDirection": "Metin Yönü",
       "actualSize": "Gerçek Boyut",
-      "devToggleDeveloperTools": "Geliştirici Araçlarını Aç/Kapat"
+      "devToggleDeveloperTools": "Geliştirici Araçlarını Aç/Kapat",
+      "toggleGitAnnotate": "View: Toggle Git annotations (blame and changes)",
+      "gitCommitAtCursor": "View: Show Git commit for the current line"
     },
     "tabs": {
       "cycleForward": "İleri Geç",
@@ -1165,5 +1169,21 @@
     "viewImage": "Görseli Görüntüle",
     "copyLink": "Bağlantı Adresini Kopyala",
     "resumed": "Düzenleme Modu açık. Otomatik kaydetme devam ediyor."
+  },
+  "git": {
+    "notCommitted": "Not committed",
+    "deletedHere": "Deleted here:",
+    "commit": {
+      "title": "Commit",
+      "author": "Author",
+      "date": "Date",
+      "committer": "Committer",
+      "files": "Changed files",
+      "copySha": "Copy SHA",
+      "copied": "Copied",
+      "loading": "Loading…",
+      "notFound": "Commit not found.",
+      "uncommitted": "These lines are not committed yet."
+    }
   }
 }

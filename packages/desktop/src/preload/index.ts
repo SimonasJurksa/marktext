@@ -227,6 +227,13 @@ const ripgrepAPI = {
   }
 }
 
+const gitAPI = {
+  annotate: (filePath: string, contents: string, withStatus: boolean) =>
+    invoke('mt::git::annotate', filePath, contents, withStatus),
+  status: (pathname: string) => invoke('mt::git::status', pathname),
+  commit: (root: string, sha: string) => invoke('mt::git::commit', root, sha)
+}
+
 const uploaderAPI = {
   uploadImage: (req: unknown) => invoke('mt::uploader::upload', req)
 }
@@ -295,6 +302,7 @@ try {
   contextBridge.exposeInMainWorld('commandExists', commandAPI)
   contextBridge.exposeInMainWorld('i18nUtils', i18nAPI)
   contextBridge.exposeInMainWorld('ripgrep', ripgrepAPI)
+  contextBridge.exposeInMainWorld('git', gitAPI)
   contextBridge.exposeInMainWorld('uploader', uploaderAPI)
   contextBridge.exposeInMainWorld('fonts', fontsAPI)
   contextBridge.exposeInMainWorld('diagram', diagramAPI)

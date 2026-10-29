@@ -2,6 +2,7 @@ import { registerBootInfo } from './bootInfo'
 import { registerFsHandlers } from './fs'
 import { registerPathHandlers } from './paths'
 import { registerRipgrepHandlers } from './ripgrep'
+import { registerGitHandlers } from './git'
 import { registerUploaderHandlers } from './uploader'
 import { registerFontsHandlers } from './fonts'
 import { registerShellHandlers } from './shell'
@@ -18,6 +19,7 @@ export const registerSandboxIpcHandlers = (): void => {
   registerFsHandlers()
   registerPathHandlers()
   registerRipgrepHandlers()
+  registerGitHandlers()
   registerUploaderHandlers()
   registerFontsHandlers()
   registerShellHandlers()

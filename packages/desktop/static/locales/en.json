@@ -131,7 +131,9 @@
       "toggleTableOfContents": "Show Table of Contents",
       "reloadImages": "Reload Images",
       "showDeveloperTools": "Show Developer Tools",
-      "reloadWindow": "Reload Window"
+      "reloadWindow": "Reload Window",
+      "gitAnnotate": "Git Annotate (Blame and Changes)",
+      "gitCommitAtCursor": "Show Git Commit for Current Line"
     },
     "format": {
       "format": "Format",
@@ -1004,7 +1006,9 @@
       "reloadImages": "Reload Images",
       "textDirection": "Text Direction",
       "actualSize": "Actual Size",
-      "devToggleDeveloperTools": "Toggle Developer Tools"
+      "devToggleDeveloperTools": "Toggle Developer Tools",
+      "toggleGitAnnotate": "View: Toggle Git annotations (blame and changes)",
+      "gitCommitAtCursor": "View: Show Git commit for the current line"
     },
     "tabs": {
       "cycleForward": "Cycle Forward",
@@ -1165,5 +1169,21 @@
     "viewImage": "View Image",
     "copyLink": "Copy Link Address",
     "resumed": "Edit Mode is on. Auto-save has resumed."
+  },
+  "git": {
+    "notCommitted": "Not committed",
+    "deletedHere": "Deleted here:",
+    "commit": {
+      "title": "Commit",
+      "author": "Author",
+      "date": "Date",
+      "committer": "Committer",
+      "files": "Changed files",
+      "copySha": "Copy SHA",
+      "copied": "Copied",
+      "loading": "Loading…",
+      "notFound": "Commit not found.",
+      "uncommitted": "These lines are not committed yet."
+    }
   }
 }

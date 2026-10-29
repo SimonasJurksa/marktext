@@ -19,7 +19,8 @@ this fork changes.
 | [Plan questions: badge and answer wizard](#plan-questions-badge-and-answer-wizard-ctrlshiftk) (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd>) | ✅ since 0.24.0-sj.2 |
 | [Auto save on by default](#auto-save-on-by-default) | ✅ since 0.24.0-sj.2 |
 | [Find in Files](#find-in-files-ctrlshiftf) (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd>) | ✅ since 0.24.0-sj.3 |
-| Git: changed blocks, diff against HEAD, blame | 🚧 planned |
+| [Git annotations: blame, changes, commit details](#git-annotations-ctrlaltg) (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>G</kbd>) | ✅ since 0.24.0-sj.4 |
+| Git: changed-files panel, revert hunk / file | 🚧 planned |
 
 ### Switch to open file (Ctrl+E)
 
@@ -84,6 +85,10 @@ to <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>K</kbd>.
 Agents read files from disk, so unsaved edits are invisible to them. Auto save is enabled by
 default with a 2 s delay (upstream: off, 5 s). Both can still be changed in *Preferences → General*.
 
+A `preferences.json` written by upstream MarkText keeps its own `autoSave: false`, so the fork
+switches it on once on first start and records `forkDefaultsVersion` in the file. Turning auto
+save off again afterwards is respected.
+
 ### Find in Files (Ctrl+Shift+F)
 
 A PhpStorm-style *Find in Files* dialog that searches **any directory**, not only the open
@@ -104,6 +109,35 @@ bound to a key on Linux).
 - Searches hidden files and files listed in `.gitignore`; stops after 100 matches and says so.
   *Stop* cancels a long search. Powered by upstream's bundled ripgrep, no indexing.
 
+### Git annotations (Ctrl+Alt+G)
+
+PhpStorm-style *Annotate*: who changed what, and what differs from the last commit, for any file
+inside a Git repository. Everything runs through the `git` command that Ubuntu already has; nothing
+else to install.
+
+- **Annotate column** — <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>G</kbd> (or *View → Git Annotate*)
+  toggles a column on the left of the text. In WYSIWYG mode it has one row per block (paragraph,
+  heading, list, code block …) showing the date and author of the newest commit that touched it;
+  in source code mode it is a CodeMirror gutter with one row per line. Rows are tinted per author.
+- **Changes against HEAD** — a green edge marks added blocks/lines, blue marks modified ones, and a
+  red underline marks the place where text was deleted (hover to read the deleted lines). Blocks
+  edited since the last commit read *Not committed*. Unsaved edits count too: the blame and the
+  diff are computed from the editor buffer, not only from the file on disk.
+- **Commit dialog** — click a row (or *View → Show Git Commit for Current Line*) to see the full
+  SHA with a *Copy SHA* button, author, date, the complete commit message and the files that commit
+  changed.
+- **Title bar** — the commit of the block under the caret is summarised next to the word count
+  (`author · 2 hours ago · subject`); clicking it opens the same dialog.
+- **File tree** — modified files are shown in blue, added or untracked files in green, like
+  PhpStorm's project view.
+- Data refreshes 1 s after you stop typing, on save, when the window regains focus, when another
+  program (an agent) changes the file, and when switching tabs. The column state is remembered per
+  window.
+
+Limitations of this first iteration: read-only (no stage, commit or revert), no list of changed
+files beyond the tree colours, and the WYSIWYG mapping is per block, so a one-word change still
+marks the whole paragraph.
+
 ## Changed keybindings (Linux)
 
 | Action | Upstream | This fork |
@@ -114,6 +148,7 @@ bound to a key on Linux).
 | Sidebar Find in Folder | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd> | unbound (Edit menu, command palette) |
 | Answer plan questions | — | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd> |
 | Insert code fence | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd> | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>K</kbd> |
+| Git annotations (blame and changes) | — | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>G</kbd> |
 
 All of them can be changed in *Preferences → Keybindings*.
 
@@ -161,6 +196,9 @@ Only the `deb` target is built; AppImage/snap/rpm were dropped from `electron-bu
 
 ## Release notes
 
+- **0.24.0-sj.4** — Git annotations (blame column in both modes, changes against HEAD, commit
+  dialog, title-bar blame line, file tree colours); auto save is switched on once for preference
+  files inherited from upstream.
 - **0.24.0-sj.3** — Find in Files dialog; `Answer:` accepted next to `Atsakymas:`.
 - **0.24.0-sj.2** — plan question badge and wizard; auto save on by default (2 s); code fence on
   <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>K</kbd>.

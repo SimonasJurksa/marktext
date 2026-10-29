@@ -106,6 +106,8 @@ const COMMANDS = Object.freeze({
   VIEW_OUTLINE_COLLAPSE_ALL: 'view.outline-collapse-all',
   VIEW_OUTLINE_EXPAND_ALL: 'view.outline-expand-all',
   VIEW_TOGGLE_TOC: 'view.toggle-toc',
+  VIEW_TOGGLE_GIT_ANNOTATE: 'view.toggle-git-annotate',
+  VIEW_GIT_COMMIT_AT_CURSOR: 'view.git-commit-at-cursor',
   VIEW_TYPEWRITER_MODE: 'view.typewriter-mode',
 
   WINDOW_MINIMIZE: 'window.minimize',

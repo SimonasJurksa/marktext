@@ -131,7 +131,9 @@
       "toggleTableOfContents": "顯示目錄",
       "reloadImages": "重新載入圖片",
       "showDeveloperTools": "顯示開發者工具",
-      "reloadWindow": "重新載入視窗"
+      "reloadWindow": "重新載入視窗",
+      "gitAnnotate": "Git Annotate (Blame and Changes)",
+      "gitCommitAtCursor": "Show Git Commit for Current Line"
     },
     "format": {
       "format": "格式",
@@ -1004,7 +1006,9 @@
       "reloadImages": "重新載入圖片",
       "textDirection": "文字方向",
       "actualSize": "實際大小",
-      "devToggleDeveloperTools": "切換開發者工具"
+      "devToggleDeveloperTools": "切換開發者工具",
+      "toggleGitAnnotate": "View: Toggle Git annotations (blame and changes)",
+      "gitCommitAtCursor": "View: Show Git commit for the current line"
     },
     "tabs": {
       "cycleForward": "向前循環",
@@ -1165,5 +1169,21 @@
     "viewImage": "檢視圖片",
     "copyLink": "複製連結位址",
     "resumed": "已切換至編輯模式，自動儲存已恢復。"
+  },
+  "git": {
+    "notCommitted": "Not committed",
+    "deletedHere": "Deleted here:",
+    "commit": {
+      "title": "Commit",
+      "author": "Author",
+      "date": "Date",
+      "committer": "Committer",
+      "files": "Changed files",
+      "copySha": "Copy SHA",
+      "copied": "Copied",
+      "loading": "Loading…",
+      "notFound": "Commit not found.",
+      "uncommitted": "These lines are not committed yet."
+    }
   }
 }

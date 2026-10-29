@@ -131,7 +131,9 @@
       "toggleTableOfContents": "Inhoudsopgave tonen",
       "reloadImages": "Afbeeldingen herladen",
       "showDeveloperTools": "Ontwikkelaarshulpmiddelen tonen",
-      "reloadWindow": "Venster herladen"
+      "reloadWindow": "Venster herladen",
+      "gitAnnotate": "Git Annotate (Blame and Changes)",
+      "gitCommitAtCursor": "Show Git Commit for Current Line"
     },
     "format": {
       "format": "Opmaak",
@@ -1004,7 +1006,9 @@
       "reloadImages": "Afbeeldingen herladen",
       "textDirection": "Tekstrichting",
       "actualSize": "Werkelijke grootte",
-      "devToggleDeveloperTools": "Ontwikkelaarshulpmiddelen in-/uitschakelen"
+      "devToggleDeveloperTools": "Ontwikkelaarshulpmiddelen in-/uitschakelen",
+      "toggleGitAnnotate": "View: Toggle Git annotations (blame and changes)",
+      "gitCommitAtCursor": "View: Show Git commit for the current line"
     },
     "tabs": {
       "cycleForward": "Volgende tabblad",
@@ -1165,5 +1169,21 @@
     "viewImage": "Afbeelding bekijken",
     "copyLink": "Linkadres kopiëren",
     "resumed": "De bewerkingsmodus is ingeschakeld. Automatisch opslaan is hervat."
+  },
+  "git": {
+    "notCommitted": "Not committed",
+    "deletedHere": "Deleted here:",
+    "commit": {
+      "title": "Commit",
+      "author": "Author",
+      "date": "Date",
+      "committer": "Committer",
+      "files": "Changed files",
+      "copySha": "Copy SHA",
+      "copied": "Copied",
+      "loading": "Loading…",
+      "notFound": "Commit not found.",
+      "uncommitted": "These lines are not committed yet."
+    }
   }
 }

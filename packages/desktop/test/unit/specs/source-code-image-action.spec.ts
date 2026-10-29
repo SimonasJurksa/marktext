@@ -10,6 +10,7 @@ import {
   getMarkdownHeadingLines,
   scrollSourceEditorToLine
 } from '@/util/sourceModeToc'
+import { authorHue, formatDateTime, rowLabel, shortSha, summarizeLines } from '@/git/format'
 
 // `handleImageAction` lives as a <script setup> closure in sourceCode.vue
 // (registered on the `image-action` bus during onMounted). The desktop unit
@@ -69,7 +70,8 @@ const loadComponent = (deps: Record<string, unknown>) => {
       useEditorStore, usePreferencesStore, storeToRefs, codeMirror,
       setCursorAtFirstLine, setTextDirection, getWordCount, adjustCursor, bus,
       oneDarkThemes, railscastsThemes, findMarkdownHeadingLine, getMarkdownHeadingLines, scrollSourceEditorToLine,
-      registerSourceView, captureSourceHistory, restoreSourceHistory } = __deps
+      registerSourceView, captureSourceHistory, restoreSourceHistory,
+      useGitStore, t, authorHue, formatDateTime, rowLabel, shortSha, summarizeLines } = __deps
     ${js}
     return module.exports`
   ) as (deps: Record<string, unknown>, exports: object, module: object) => SetupModule
@@ -103,6 +105,13 @@ const makeDeps = (over: Record<string, unknown> = {}) => ({
   bus: { on: () => {}, off: () => {}, emit: () => {} },
   oneDarkThemes: [],
   railscastsThemes: [],
+  useGitStore: () => ({ annotateVisible: false, version: 0, annotationFor: () => null, setCursorLine: () => {} }),
+  t: (key: string) => key,
+  authorHue,
+  formatDateTime,
+  rowLabel,
+  shortSha,
+  summarizeLines,
   ...over
 })
 

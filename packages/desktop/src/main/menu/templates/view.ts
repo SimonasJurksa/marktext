@@ -88,6 +88,19 @@ export default function(keybindings: Keybindings): MenuItemConstructorOptions {
       }
     },
     {
+      label: t('menu.view.gitAnnotate'),
+      accelerator: keybindings.getAccelerator('view.toggle-git-annotate') ?? undefined,
+      click(_item, focusedWindow) {
+        actions.toggleGitAnnotate(focusedWindow as BrowserWindow | undefined)
+      }
+    },
+    {
+      label: t('menu.view.gitCommitAtCursor'),
+      click(_item, focusedWindow) {
+        actions.showGitCommitAtCursor(focusedWindow as BrowserWindow | undefined)
+      }
+    },
+    {
       label: t('menu.view.reloadImages'),
       accelerator: keybindings.getAccelerator('view.reload-images') ?? undefined,
       click(_item, focusedWindow) {

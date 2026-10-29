@@ -2,13 +2,25 @@
   <div
     class="editor-wrapper"
     :class="[
-      { typewriter: typewriter, focus: focus, source: sourceCode, 'viewer-open': viewerOpen }
+      {
+        typewriter: typewriter,
+        focus: focus,
+        source: sourceCode,
+        'viewer-open': viewerOpen,
+        'git-annotate': annotateVisible && !sourceCode
+      }
     ]"
     :dir="textDirection"
   >
     <div
       ref="editorRef"
       class="editor-component"
+    />
+    <git-annotate-gutter
+      v-if="annotateVisible && !sourceCode && currentFile && editor"
+      :engine="editor"
+      :container="editorRef"
+      :tab-id="currentFile.id"
     />
     <media-viewer
       ref="mediaViewer"
@@ -121,6 +133,9 @@ import { exportStyledHTML, type HeaderFooterPart } from '@/util/exportHtml'
 import { applyCursor, isIndexCursor } from '@/util/cursor'
 import EditorSearch from '../search/index.vue'
 import MediaViewer from '../mediaViewer/index.vue'
+import GitAnnotateGutter from '../gitAnnotate/gutter.vue'
+import { useGitStore } from '@/store/git'
+import { computeBlockRanges } from '@/git/blockLines'
 import bus from '@/bus'
 import { DEFAULT_EDITOR_FONT_FAMILY, DEFAULT_CODE_FONT_FAMILY } from '@/config'
 import notice from '@/services/notification'
@@ -257,6 +272,31 @@ const selectionChange = ref<ISelectionChangePayload | null>(null)
 // `shallowRef`: the engine instance is `markRaw`d anyway, and a deep ref
 // would map `Muya` through `UnwrapRef` and lose the class's own type.
 const editor = shallowRef<Muya | null>(null)
+
+const gitStore = useGitStore()
+const { annotateVisible } = storeToRefs(gitStore)
+
+// Block-to-line ranges feed the title bar's blame line; the content watcher
+// below fires for edits, file loads and external reloads alike.
+let gitBlocksTimer: ReturnType<typeof setTimeout> | null = null
+const scheduleGitBlockSync = (): void => {
+  if (gitBlocksTimer) clearTimeout(gitBlocksTimer)
+  gitBlocksTimer = setTimeout(() => {
+    gitBlocksTimer = null
+    const tab = currentFile.value
+    if (!editor.value || !tab || sourceCode.value) return
+    gitStore.setBlockRanges(tab.id, computeBlockRanges(editor.value))
+    syncGitCursorBlock()
+  }, 300)
+}
+const syncGitCursorBlock = (): void => {
+  const tab = currentFile.value
+  if (!editor.value || !tab || sourceCode.value) return
+  const state = editor.value.getSelectionState() as { anchor?: { path?: unknown[] } } | null
+  const index = state?.anchor?.path?.[0]
+  if (typeof index === 'number') gitStore.setCursorBlock(tab.id, index)
+}
+watch(() => [currentFile.value?.id, currentFile.value?.markdown], scheduleGitBlockSync)
 watch(() => commandCenterStore.activeKeybindings, () => {
   editor.value?.refreshShortcutHints()
 })
@@ -1790,6 +1830,8 @@ onMounted(() => {
   renderedMarkdown = currentFile.value?.markdown ?? ''
   releaseViewState = registerRenderedViewState({ documentId: () => renderedDocumentId, markdown: () => renderedMarkdown, view: { engine: muya, container } })
   muya.on('selection-change', documentViewChanged)
+  muya.on('selection-change', syncGitCursorBlock)
+  scheduleGitBlockSync()
 
   bus.on('language-changed', handleLanguageChanged)
 
@@ -1968,6 +2010,8 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  if (gitBlocksTimer) clearTimeout(gitBlocksTimer)
+  gitBlocksTimer = null
   releaseViewState?.()
   registerDocumentView(null)
   document.removeEventListener('selectionchange', readingSelectionChanged)
@@ -2086,6 +2130,11 @@ onBeforeUnmount(() => {
 .editor-component .mu-container {
   padding-top: 20px;
   padding-bottom: 100vh;
+}
+
+.editor-wrapper.git-annotate .editor-component {
+  /* Room for the annotate column (see git/constants.ts). */
+  padding-left: 150px;
 }
 
 .typewriter .editor-component {

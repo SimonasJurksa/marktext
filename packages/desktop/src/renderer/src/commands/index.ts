@@ -248,6 +248,19 @@ const commands: CommandDescriptor[] = [
       bus.emit('plan-wizard::open')
     }
   },
+  {
+    id: 'view.toggle-git-annotate',
+    execute: async() => {
+      bus.emit('git-annotate::toggle')
+    }
+  },
+  {
+    id: 'view.git-commit-at-cursor',
+    execute: async() => {
+      await delay(150)
+      bus.emit('git-commit::open-at-cursor')
+    }
+  },
 
 
   {

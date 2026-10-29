@@ -131,7 +131,9 @@
       "toggleTableOfContents": "목차 표시",
       "reloadImages": "이미지 새로고침",
       "showDeveloperTools": "개발자 도구 보기",
-      "reloadWindow": "창 새로고침"
+      "reloadWindow": "창 새로고침",
+      "gitAnnotate": "Git Annotate (Blame and Changes)",
+      "gitCommitAtCursor": "Show Git Commit for Current Line"
     },
     "format": {
       "format": "서식",
@@ -1004,7 +1006,9 @@
       "reloadImages": "이미지 새로고침",
       "textDirection": "텍스트 방향",
       "actualSize": "실제 크기",
-      "devToggleDeveloperTools": "개발자 도구 전환"
+      "devToggleDeveloperTools": "개발자 도구 전환",
+      "toggleGitAnnotate": "View: Toggle Git annotations (blame and changes)",
+      "gitCommitAtCursor": "View: Show Git commit for the current line"
     },
     "tabs": {
       "cycleForward": "앞으로 순환",
@@ -1165,5 +1169,21 @@
     "viewImage": "이미지 보기",
     "copyLink": "링크 주소 복사",
     "resumed": "편집 모드가 켜졌습니다. 자동 저장이 재개되었습니다."
+  },
+  "git": {
+    "notCommitted": "Not committed",
+    "deletedHere": "Deleted here:",
+    "commit": {
+      "title": "Commit",
+      "author": "Author",
+      "date": "Date",
+      "committer": "Committer",
+      "files": "Changed files",
+      "copySha": "Copy SHA",
+      "copied": "Copied",
+      "loading": "Loading…",
+      "notFound": "Commit not found.",
+      "uncommitted": "These lines are not committed yet."
+    }
   }
 }

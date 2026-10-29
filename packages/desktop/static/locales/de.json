@@ -131,7 +131,9 @@
       "toggleTableOfContents": "Inhaltsverzeichnis anzeigen",
       "reloadImages": "Bilder neu laden",
       "showDeveloperTools": "Entwicklertools anzeigen",
-      "reloadWindow": "Fenster neu laden"
+      "reloadWindow": "Fenster neu laden",
+      "gitAnnotate": "Git Annotate (Blame and Changes)",
+      "gitCommitAtCursor": "Show Git Commit for Current Line"
     },
     "format": {
       "format": "Format",
@@ -1004,7 +1006,9 @@
       "reloadImages": "Bilder neu laden",
       "textDirection": "Textrichtung",
       "actualSize": "Tatsächliche Größe",
-      "devToggleDeveloperTools": "Entwicklertools umschalten"
+      "devToggleDeveloperTools": "Entwicklertools umschalten",
+      "toggleGitAnnotate": "View: Toggle Git annotations (blame and changes)",
+      "gitCommitAtCursor": "View: Show Git commit for the current line"
     },
     "tabs": {
       "cycleForward": "Vorwärts wechseln",
@@ -1165,5 +1169,21 @@
     "viewImage": "Bild anzeigen",
     "copyLink": "Linkadresse kopieren",
     "resumed": "Der Bearbeitungsmodus ist aktiviert. Das automatische Speichern wurde fortgesetzt."
+  },
+  "git": {
+    "notCommitted": "Not committed",
+    "deletedHere": "Deleted here:",
+    "commit": {
+      "title": "Commit",
+      "author": "Author",
+      "date": "Date",
+      "committer": "Committer",
+      "files": "Changed files",
+      "copySha": "Copy SHA",
+      "copied": "Copied",
+      "loading": "Loading…",
+      "notFound": "Commit not found.",
+      "uncommitted": "These lines are not committed yet."
+    }
   }
 }

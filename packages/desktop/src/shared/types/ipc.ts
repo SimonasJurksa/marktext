@@ -1,4 +1,5 @@
 import type { ProjectRootsSnapshot, ProjectTreeEvent } from './project'
+import type { GitAnnotation, GitCommitDetails, GitRootStatus } from './git'
 /**
  * Cross-process IPC contract: invoke returns a Promise, send is fire-and-forget,
  * sync returns directly, and main events push payloads to renderer listeners.
@@ -93,6 +94,12 @@ export interface IpcInvokeChannels {
   'mt::fs::stat': { args: [path: string]; ret: SerializedStat }
   'mt::fs::unlink': { args: [path: string]; ret: void }
   'mt::fs::write-file': { args: [path: string, data: string | Uint8Array]; ret: void }
+  'mt::git::annotate': {
+    args: [filePath: string, contents: string, withStatus: boolean]
+    ret: GitAnnotation | null
+  }
+  'mt::git::status': { args: [pathname: string]; ret: GitRootStatus | null }
+  'mt::git::commit': { args: [root: string, sha: string]; ret: GitCommitDetails | null }
   'mt::i18n::is-supported': { args: [lang: string]; ret: boolean }
   'mt::i18n::load': { args: [language: string]; ret: Record<string, unknown> }
   'mt::i18n::supported': { args: []; ret: string[] }

@@ -12,6 +12,7 @@ import type {
 } from '@shared/types/ipc'
 import type { MenuTemplate, MenuPopupPosition } from '@shared/types/menu'
 import type { SerializedStat } from '@shared/types/files'
+import type { GitAnnotation, GitCommitDetails, GitRootStatus } from '@shared/types/git'
 
 declare global {
   const MARKTEXT_VERSION: string
@@ -164,6 +165,12 @@ declare global {
     loadTranslations(language: string): Promise<Record<string, unknown>>
   }
 
+  interface GitAPI {
+    annotate(filePath: string, contents: string, withStatus: boolean): Promise<GitAnnotation | null>
+    status(pathname: string): Promise<GitRootStatus | null>
+    commit(root: string, sha: string): Promise<GitCommitDetails | null>
+  }
+
   interface RipgrepAPI {
     start(req: unknown): Promise<{ searchId: string }>
     cancel(searchId: string): void
@@ -199,6 +206,7 @@ declare global {
     commandExists: CommandExistsAPI
     i18nUtils: I18nUtilsAPI
     ripgrep: RipgrepAPI
+    git: GitAPI
     uploader: UploaderAPI
     fonts: FontsAPI
     diagram: DiagramAPI

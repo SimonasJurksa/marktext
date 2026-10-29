@@ -131,7 +131,9 @@
       "toggleTableOfContents": "Показать оглавление",
       "reloadImages": "Обновить изображения",
       "showDeveloperTools": "Инструменты разработчика",
-      "reloadWindow": "Перезагрузить окно"
+      "reloadWindow": "Перезагрузить окно",
+      "gitAnnotate": "Git Annotate (Blame and Changes)",
+      "gitCommitAtCursor": "Show Git Commit for Current Line"
     },
     "format": {
       "format": "Формат",
@@ -1004,7 +1006,9 @@
       "reloadImages": "Обновить изображения",
       "textDirection": "Направление текста",
       "actualSize": "Реальный размер",
-      "devToggleDeveloperTools": "Переключить инструменты разработчика"
+      "devToggleDeveloperTools": "Переключить инструменты разработчика",
+      "toggleGitAnnotate": "View: Toggle Git annotations (blame and changes)",
+      "gitCommitAtCursor": "View: Show Git commit for the current line"
     },
     "tabs": {
       "cycleForward": "Следующая вкладка",
@@ -1165,5 +1169,21 @@
     "viewImage": "Просмотреть изображение",
     "copyLink": "Копировать адрес ссылки",
     "resumed": "Режим редактирования включён. Автосохранение возобновлено."
+  },
+  "git": {
+    "notCommitted": "Not committed",
+    "deletedHere": "Deleted here:",
+    "commit": {
+      "title": "Commit",
+      "author": "Author",
+      "date": "Date",
+      "committer": "Committer",
+      "files": "Changed files",
+      "copySha": "Copy SHA",
+      "copied": "Copied",
+      "loading": "Loading…",
+      "notFound": "Commit not found.",
+      "uncommitted": "These lines are not committed yet."
+    }
   }
 }

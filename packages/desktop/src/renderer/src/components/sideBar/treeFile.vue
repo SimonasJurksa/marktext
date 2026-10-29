@@ -5,7 +5,8 @@
     class="side-bar-file"
     :style="{ 'padding-left': `${depth * 6 + 15}px`, opacity: file.isMarkdown ? 1 : 0.75 }"
     :class="[
-      { current: currentFile?.pathname === file.pathname, active: file.id === activeItem.id }
+      { current: currentFile?.pathname === file.pathname, active: file.id === activeItem.id },
+      gitStatus ? `git-${gitStatus}` : ''
     ]"
     @click="handleFileClick"
     @dblclick="handleFileDblClick"
@@ -25,11 +26,12 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { computed, inject, ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useProjectStore } from '@/store/project'
 import { useEditorStore } from '@/store/editor'
 import { usePreferencesStore } from '@/store/preferences'
+import { useGitStore } from '@/store/git'
 import FileIcon from './icon.vue'
 import { showContextMenu } from '../../contextMenu/sideBar'
 import bus from '../../bus'
@@ -45,6 +47,9 @@ const props = defineProps<{
 const projectStore = useProjectStore()
 const editorStore = useEditorStore()
 const preferencesStore = usePreferencesStore()
+const gitStore = useGitStore()
+
+const gitStatus = computed(() => gitStore.fileStatus(props.file.pathname))
 
 const fileEl = ref<HTMLDivElement | null>(null)
 const renameInput = ref<HTMLInputElement | null>(null)

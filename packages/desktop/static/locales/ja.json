@@ -131,7 +131,9 @@
       "toggleTableOfContents": "目次を表示",
       "reloadImages": "画像の再読み込み",
       "showDeveloperTools": "開発者ツールの表示",
-      "reloadWindow": "ウィンドウの再読み込み"
+      "reloadWindow": "ウィンドウの再読み込み",
+      "gitAnnotate": "Git Annotate (Blame and Changes)",
+      "gitCommitAtCursor": "Show Git Commit for Current Line"
     },
     "format": {
       "format": "フォーマット",
@@ -1004,7 +1006,9 @@
       "reloadImages": "画像を再読み込み",
       "textDirection": "テキスト方向",
       "actualSize": "実際のサイズ",
-      "devToggleDeveloperTools": "開発者ツールの切り替え"
+      "devToggleDeveloperTools": "開発者ツールの切り替え",
+      "toggleGitAnnotate": "View: Toggle Git annotations (blame and changes)",
+      "gitCommitAtCursor": "View: Show Git commit for the current line"
     },
     "tabs": {
       "cycleForward": "前方に循環",
@@ -1165,5 +1169,21 @@
     "viewImage": "画像を表示",
     "copyLink": "リンクのアドレスをコピー",
     "resumed": "編集モードになりました。自動保存を再開しました。"
+  },
+  "git": {
+    "notCommitted": "Not committed",
+    "deletedHere": "Deleted here:",
+    "commit": {
+      "title": "Commit",
+      "author": "Author",
+      "date": "Date",
+      "committer": "Committer",
+      "files": "Changed files",
+      "copySha": "Copy SHA",
+      "copied": "Copied",
+      "loading": "Loading…",
+      "notFound": "Commit not found.",
+      "uncommitted": "These lines are not committed yet."
+    }
   }
 }

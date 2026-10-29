@@ -29,6 +29,9 @@ import { wordCount as getWordCount } from '@muyajs/core'
 import { adjustCursor, isWindows } from '../../util'
 import { getSourceExtraKeys } from '../../codeMirror/keybindings'
 import bus from '../../bus'
+import { t } from '../../i18n'
+import { useGitStore } from '@/store/git'
+import { authorHue, formatDateTime, rowLabel, shortSha, summarizeLines } from '@/git/format'
 import { oneDarkThemes, railscastsThemes } from '@/config'
 
 interface MuyaIndexCursorLike {
@@ -44,6 +47,7 @@ const props = defineProps<{
 
 const editorStore = useEditorStore()
 const preferencesStore = usePreferencesStore()
+const gitStore = useGitStore()
 
 const sourceCodeContainer = ref<HTMLDivElement | null>(null)
 
@@ -81,6 +85,58 @@ watch(
 watch(sourceCodeLineNumbers, (value) => {
   editor.value?.setOption('lineNumbers', value)
 })
+
+const GIT_GUTTER = 'CodeMirror-git-annotate'
+const GIT_LINE_CLASSES = ['git-line-added', 'git-line-modified', 'git-line-deleted-after']
+
+const clearGitAnnotation = (cm: CodeMirror.Editor): void => {
+  cm.clearGutter(GIT_GUTTER)
+  cm.eachLine((line) => {
+    for (const className of GIT_LINE_CLASSES) cm.removeLineClass(line, 'wrap', className)
+  })
+}
+
+// One gutter marker per source line: date and author of the newest commit, or
+// "not committed"; line classes carry the diff against HEAD.
+const applyGitAnnotation = (): void => {
+  const cm = editor.value
+  if (!cm) return
+  const show = gitStore.annotateVisible
+  cm.setOption('gutters', show ? [GIT_GUTTER] : [])
+  cm.operation(() => {
+    clearGitAnnotation(cm)
+    if (!show) return
+    const annotation = gitStore.annotationFor(tabId.value)
+    if (!annotation) return
+    const count = cm.lineCount()
+    for (let line = 0; line < count; line++) {
+      const summary = summarizeLines(annotation, annotation.changes, line, line + 1)
+      const commit = summary.commit && !summary.uncommitted ? summary.commit : null
+      const marker = document.createElement('div')
+      marker.className = commit ? 'cm-git-annotate' : 'cm-git-annotate uncommitted'
+      marker.textContent = rowLabel(summary, t('git.notCommitted'))
+      marker.title = commit
+        ? `${shortSha(commit.sha)} · ${commit.author} · ${formatDateTime(commit.authorTime)}\n${commit.summary}`
+        : t('git.notCommitted')
+      if (summary.deleted.length) {
+        marker.title += `\n\n${t('git.deletedHere')}\n${summary.deleted.map((text) => `- ${text}`).join('\n')}`
+      }
+      if (commit) marker.style.setProperty('--author-hue', String(authorHue(commit.author)))
+      cm.setGutterMarker(line, GIT_GUTTER, marker)
+      if (summary.change) cm.addLineClass(line, 'wrap', `git-line-${summary.change}`)
+      if (summary.deleted.length) cm.addLineClass(line, 'wrap', 'git-line-deleted-after')
+    }
+  })
+}
+
+const handleGitGutterClick = (_cm: CodeMirror.Editor, line: number, gutter: string): void => {
+  if (gutter !== GIT_GUTTER) return
+  const annotation = gitStore.annotationFor(tabId.value)
+  if (!annotation) return
+  bus.emit('git-commit::open', { root: annotation.root, sha: annotation.lines[line] ?? '' })
+}
+
+watch([() => gitStore.annotateVisible, () => gitStore.version, tabId], applyGitAnnotation)
 
 // A fresh instance reads these at mount; the watch is for a preference changed
 // while the source view is already open (#5446).
@@ -392,6 +448,7 @@ const listenChange = (cm: CodeMirror.Editor) => {
     saveContent(instance)
     updateSelectionWordCount(instance)
     setActiveHeadingAtLine(instance.getCursor().line)
+    if (tabId.value) gitStore.setCursorLine(tabId.value, instance.getCursor().line)
   })
 }
 
@@ -484,6 +541,8 @@ onMounted(() => {
   })
   codeMirrorInstance.on('cursorActivity', documentViewChanged)
   listenChange(codeMirrorInstance)
+  codeMirrorInstance.on('gutterClick', handleGitGutterClick)
+  applyGitAnnotation()
   registerSourceView(async () => {
     if (useLayoutStore().managed) {
       if (editor.value) saveContent(editor.value)
@@ -558,5 +617,35 @@ onBeforeUnmount(() => {
    still clearing 3:1 in all of them, with one-dark at 3.67 setting the floor. */
 .source-code .CodeMirror .cm-formatting-math {
   opacity: 0.65;
+}
+.source-code .CodeMirror-git-annotate {
+  width: 150px;
+}
+.source-code .cm-git-annotate {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 0 6px 0 8px;
+  border-left: 3px solid transparent;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 11px;
+  color: var(--editorColor80);
+  background: hsla(var(--author-hue, 0), 55%, 55%, 0.16);
+  cursor: pointer;
+}
+.source-code .cm-git-annotate.uncommitted {
+  background: transparent;
+  color: var(--editorColor50);
+  font-style: italic;
+}
+.source-code .git-line-added .cm-git-annotate {
+  border-left-color: #30a46c;
+}
+.source-code .git-line-modified .cm-git-annotate {
+  border-left-color: #3b82f6;
+}
+.source-code .git-line-deleted-after .cm-git-annotate {
+  box-shadow: inset 0 -2px 0 #e5484d;
 }
 </style>
