@@ -5,9 +5,27 @@
     class="git-blame-line title-no-drag"
     :class="{ uncommitted: info.uncommitted }"
     :title="title"
+    :aria-label="title"
     @click.stop="openCommit"
   >
-    {{ text }}
+    <svg viewBox="0 0 16 16">
+      <circle
+        cx="8"
+        cy="8"
+        r="3"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.6"
+        :stroke-dasharray="info.uncommitted ? '2.4 1.6' : undefined"
+      />
+      <path
+        d="M0.8 8H5M11 8h4.2"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.6"
+        stroke-linecap="round"
+      />
+    </svg>
   </button>
 </template>
 
@@ -23,19 +41,18 @@ const gitStore = useGitStore()
 
 const info = computed(() => gitStore.currentLine)
 
-const text = computed(() => {
-  const current = info.value
-  if (!current) return ''
-  if (!current.commit) return t('git.notCommitted')
-  const { author, authorTime, summary } = current.commit
-  return `${author} · ${relativeTime(authorTime, Date.now(), locale.value)} · ${summary}`
-})
-
+// The bar shows only the glyph, so the tooltip carries everything the old
+// inline text did plus the SHA and the absolute date.
 const title = computed(() => {
   const current = info.value
   if (!current?.commit) return t('git.notCommitted')
   const { sha, author, authorMail, authorTime, summary } = current.commit
-  return `${shortSha(sha)} · ${author} <${authorMail}> · ${formatDateTime(authorTime)}\n${summary}`
+  const when = relativeTime(authorTime, Date.now(), locale.value)
+  return [
+    `${author} <${authorMail}> · ${when}`,
+    summary,
+    `${shortSha(sha)} · ${formatDateTime(authorTime)}`
+  ].join('\n')
 })
 
 const openCommit = (): void => {
@@ -47,24 +64,30 @@ const openCommit = (): void => {
 
 <style scoped>
 .git-blame-line {
-  max-width: 340px;
-  margin-right: 10px;
-  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-right: 6px;
+  padding: 0;
   border: none;
+  border-radius: 4px;
   background: transparent;
-  font-size: 12px;
-  line-height: 20px;
   color: var(--editorColor50);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   cursor: pointer;
   -webkit-app-region: no-drag;
 }
 .git-blame-line:hover {
   color: var(--editorColor);
+  background: rgba(0, 0, 0, 0.1);
 }
 .git-blame-line.uncommitted {
-  font-style: italic;
+  color: #3b82f6;
+}
+.git-blame-line svg {
+  display: block;
+  width: 16px;
+  height: 16px;
 }
 </style>

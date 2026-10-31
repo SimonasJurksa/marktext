@@ -148,8 +148,9 @@ else to install.
 - **Commit dialog** — click a row (or *View → Show Git Commit for Current Line*) to see the full
   SHA with a *Copy SHA* button, author, date, the complete commit message and the files that commit
   changed.
-- **Title bar** — the commit of the block under the caret is summarised next to the word count
-  (`author · 2 hours ago · subject`); clicking it opens the same dialog.
+- **Title bar** — a commit glyph next to the word count stands for the commit of the block under
+  the caret (dashed and blue while the block is not committed). Hover it for author, relative and
+  absolute date, subject and short SHA; clicking it opens the same dialog.
 - **File tree** — modified files are shown in blue, added or untracked files in green.
 - Data refreshes 1 s after you stop typing, on save, when the window regains focus, when another
   program (an agent) changes the file, and when switching tabs. The column state is remembered per
@@ -222,11 +223,11 @@ All of them can be changed in *Preferences → Keybindings*.
 Download the `.deb` from [Releases](https://github.com/SimonasJurksa/marktext/releases) and run:
 
 ```sh
-wget https://github.com/SimonasJurksa/marktext/releases/download/v0.24.0-sj.7/marktext-linux-0.24.0-sj.7.deb
-sudo apt install ./marktext-linux-0.24.0-sj.7.deb
+wget https://github.com/SimonasJurksa/marktext/releases/download/v0.24.0-sj.8/marktext-linux-0.24.0-sj.8.deb
+sudo apt install ./marktext-linux-0.24.0-sj.8.deb
 ```
 
-Debian treats `0.24.0~sj.7` as *older* than upstream's `0.24.0~dev`; remove upstream first
+Debian treats `0.24.0~sj.8` as *older* than upstream's `0.24.0~dev`; remove upstream first
 (`sudo apt remove marktext`) if apt refuses to downgrade. The Git features need `git` installed.
 
 Releases are built by GitHub Actions (`.github/workflows/release.yml`, Linux x64 only): pushing a
@@ -265,6 +266,8 @@ Only the `deb` target is built; AppImage/snap/rpm were dropped from `electron-bu
 
 ## Release notes
 
+- **0.24.0-sj.8** — the title-bar blame text is replaced by a commit glyph; the details moved to
+  its tooltip, clicking it still opens the commit dialog.
 - **0.24.0-sj.7** — fork defaults extended (tab bar and sidebar shown, session restore, files
   newest first) with a one-time migration of existing preference files and a *Restore all
   defaults* button; the tab bar toggle is persisted; launching with a file no longer discards

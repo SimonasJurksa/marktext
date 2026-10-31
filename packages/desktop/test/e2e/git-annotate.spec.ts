@@ -90,10 +90,13 @@ test('git annotations show blame and changes in both modes, the commit dialog an
     await waitForEditor(page)
     await expect(page.locator('.tabs-container > li.active')).toContainText('notes.md')
 
-    // The title bar names the commit of the block under the caret.
+    // The title bar shows a commit glyph for the block under the caret; the
+    // commit details live in its tooltip.
     const blameLine = page.locator('.title-bar .git-blame-line')
-    await expect(blameLine).toContainText('Ada Lovelace')
-    await expect(blameLine).toContainText('feat: first draft')
+    await expect(blameLine).toBeVisible()
+    await expect(blameLine).toHaveAttribute('title', /Ada Lovelace/)
+    await expect(blameLine).toHaveAttribute('title', /feat: first draft/)
+    await expect(blameLine).not.toHaveClass(/uncommitted/)
 
     await sendIpcToRenderer(app, 'mt::execute-command-by-id', 'view.toggle-git-annotate')
     const rows = page.locator('.git-gutter__row')
