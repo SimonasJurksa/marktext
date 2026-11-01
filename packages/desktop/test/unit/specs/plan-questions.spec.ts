@@ -130,6 +130,81 @@ describe('plan questions', () => {
     expect(parsePlanQuestions(markdown).answered).toBe(3)
   })
 
+  it('ignores a wrapped explanation line that starts with a letter out of sequence', () => {
+    const plan = [
+      '**K2. Ar viešas sluoksnis atiduodamas be prisijungimo?**',
+      '',
+      'Pavyzdys: žurnalistas klausia — su a) gauna atsakymą; su',
+      'b) Claude sako „reikia prisijungti".',
+      '',
+      'a) taip, viešas (rekomenduojama) — tai ir rinkodara,',
+      '   ir tas pats, ką rodo find',
+      'b) ne — viskas tik prisijungusiems',
+      'c) viešas, bet siauras',
+      '',
+      'Atsakymas:'
+    ].join('\n')
+    const [question] = parsePlanQuestions(plan).questions
+    expect(question!.options.map((o) => `${o.letter}) ${o.text}`)).toEqual([
+      'a) taip, viešas — tai ir rinkodara, ir tas pats, ką rodo find',
+      'b) ne — viskas tik prisijungusiems',
+      'c) viešas, bet siauras'
+    ])
+    expect(question!.options[0]!.recommended).toBe(true)
+    expect(question!.summary).toContain('b) Claude sako „reikia prisijungti".')
+  })
+
+  it('restarts the list at a fresh a) paragraph and keeps the false start in the summary', () => {
+    const plan = [
+      '**K8. Ar MCP įeina į kainą?**',
+      '',
+      'Pavyzdys: klientas klausia „kiek kainuoja?" —',
+      'a) „įeina", b) „+200 €/m".',
+      '',
+      'a) įeina nemokamai (rekomenduojama)',
+      'b) priedas su kaina',
+      'c) tik viename plane',
+      '',
+      'Atsakymas: a'
+    ].join('\n')
+    const [question] = parsePlanQuestions(plan).questions
+    expect(question!.options.map((o) => o.letter)).toEqual(['a', 'b', 'c'])
+    expect(question!.options[0]!.text).toBe('įeina nemokamai')
+    expect(question!.summary).toBe(
+      'Pavyzdys: klientas klausia „kiek kainuoja?" —\na) „įeina", b) „+200 €/m".'
+    )
+    expect(question!.answer).toBe('a')
+  })
+
+  it('does not glue a stray paragraph after the options onto the last option', () => {
+    const plan = [
+      '**K1. Kam skiriamas?**',
+      '',
+      'a) visiems',
+      'b) klientams',
+      '',
+      'Kaip tai veikia praktikoje: žetonas galioja 8 valandas.',
+      '',
+      'Atsakymas: b'
+    ].join('\n')
+    const [question] = parsePlanQuestions(plan).questions
+    expect(question!.options).toEqual([
+      { letter: 'a', text: 'visiems', recommended: false },
+      { letter: 'b', text: 'klientams', recommended: false }
+    ])
+    expect(question!.answer).toBe('b')
+  })
+
+  it('accepts options separated by blank lines but not a skipped letter', () => {
+    const spaced = '**K1. Q**\n\na) one\n\nb) two\n\nAtsakymas:\n'
+    expect(parsePlanQuestions(spaced).questions[0]!.options.map((o) => o.letter)).toEqual(['a', 'b'])
+
+    const skipped = '**K1. Q**\n\na) one\nc) three\n\nAtsakymas:\n'
+    expect(parsePlanQuestions(skipped).questions[0]!.options).toEqual([
+      { letter: 'a', text: 'one c) three', recommended: false }
+    ])
+  })
+
   it('appends an answer line when a question has none and preserves CRLF', () => {
     const crlf = '**K1. Q**\r\n\r\na) yes\r\nb) no\r\n\r\n**K2. Q2**\r\n\r\nAtsakymas:\r\n'
     const { questions } = parsePlanQuestions(crlf)

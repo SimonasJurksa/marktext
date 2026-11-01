@@ -59,8 +59,12 @@ Answer:
 
 - A question is a bold line `**<id>. title**`. The id is a short letter prefix plus a number:
   `Q1`, `K3`, `N12`.
-- Options are lettered lines `a)`, `b)` …; a wrapped option continues on the following lines.
-  `(recommended)` / `(rekomenduojama)` marks the suggested option.
+- Options are lettered lines `a)`, `b)`, `c)` … in that order, starting a paragraph of their own;
+  a wrapped option continues on the following lines. A line that breaks the sequence (for example
+  a hard-wrapped sentence of the explanation that happens to start with `b)`) is ordinary text,
+  and a fresh `a)` after a blank line starts the list over. Text between the options and the
+  answer line is not part of the template and is not shown. `(recommended)` /
+  `(rekomenduojama)` marks the suggested option; keep the parentheses to that word alone.
 - The answer line is `Answer:` or `Atsakymas:` (Lithuanian). A question counts as answered when
   text follows the keyword on the same line or on the lines below it.
 - `---` or a heading ends a question.
@@ -277,6 +281,10 @@ Only the `deb` target is built; AppImage/snap/rpm were dropped from `electron-bu
 
 ## Release notes
 
+- **0.24.0-sj.9** — plan questions: options are taken only in sequence `a)`, `b)`, `c)` …, so a
+  wrapped explanation line starting with `b)` or an example paragraph starting with `a)` no
+  longer shows up as an option in the wizard; text between the options and the answer line is
+  no longer glued onto the last option.
 - **0.24.0-sj.8** — the title-bar blame text is replaced by a commit glyph; the details moved to
   its tooltip, clicking it still opens the commit dialog.
 - **0.24.0-sj.7** — fork defaults extended (tab bar and sidebar shown, session restore, files

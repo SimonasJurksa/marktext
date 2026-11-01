@@ -51,6 +51,11 @@ const RECOMMENDED_RE = /\((rekomenduojam[a-z]*|recommended)\)/i
 
 const EMPTY: PlanSummary = Object.freeze({ questions: [], answered: 0, total: 0 }) as PlanSummary
 
+const nextLetter = (options: PlanOption[]): string => {
+  const last = options[options.length - 1]
+  return last ? String.fromCharCode(last.letter.charCodeAt(0) + 1) : 'a'
+}
+
 export const stripCr = (line: string): string => (line.endsWith('\r') ? line.slice(0, -1) : line)
 
 /**
@@ -97,6 +102,12 @@ const parseQuestion = (lines: string[], start: number, end: number): PlanQuestio
   let answerKeyword = DEFAULT_ANSWER_KEYWORD
   const answerText: string[] = []
 
+  // Raw lines of the option block so far; handed back to the summary when a
+  // later `a)` proves the block was explanation text, not the real list.
+  let block: string[] = []
+  let previousBlank = true
+  let inOptions = false
+
   for (let index = start + 1; index < end; index++) {
     const line = lines[index] ?? ''
     if (answerLine !== null) {
@@ -110,18 +121,43 @@ const parseQuestion = (lines: string[], start: number, end: number): PlanQuestio
       answerText.push(answer[2] ?? '')
       continue
     }
+
+    // Options must run a), b), c) … without gaps, so a hard-wrapped sentence of
+    // the explanation that starts a line with `b)` stays plain text. A fresh
+    // `a)` at the start of a paragraph restarts the list: an example paragraph
+    // whose last line begins with `a)` cannot hijack the real options below it.
     const option = OPTION_RE.exec(line)
-    if (option) {
-      options.push({ letter: option[1]!, text: option[2] ?? '', recommended: false })
+    const letter = option?.[1] ?? ''
+    const restarts = letter === 'a' && (options.length === 0 || previousBlank)
+    const continues = options.length > 0 && letter === nextLetter(options)
+    if (option && (restarts || continues)) {
+      if (restarts && options.length) {
+        summary.push(...block)
+        options.length = 0
+      }
+      block = []
+      options.push({ letter, text: option[2] ?? '', recommended: false })
+      block.push(line)
+      inOptions = true
+      previousBlank = false
       continue
     }
+
+    const blank = !line.trim()
     const last = options[options.length - 1]
-    if (last && line.trim()) {
+    if (!last) {
+      summary.push(line)
+    } else if (inOptions && !blank) {
       // Wrapped option text continues on the following (usually indented) lines.
       last.text = `${last.text} ${line.trim()}`
-    } else if (!last) {
-      summary.push(line)
+      block.push(line)
+    } else {
+      // A blank line ends the option paragraph; anything else before the
+      // answer line is outside the template and not shown.
+      block.push(line)
+      inOptions = inOptions && !blank
     }
+    previousBlank = blank
   }
 
   for (const option of options) {
