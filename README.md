@@ -220,15 +220,26 @@ All of them can be changed in *Preferences → Keybindings*.
 
 ## Install
 
-Download the `.deb` from [Releases](https://github.com/SimonasJurksa/marktext/releases) and run:
+The quickest way is the install script, which fetches the latest `.deb` from
+[Releases](https://github.com/SimonasJurksa/marktext/releases), verifies it against the published
+`SHA256SUMS.txt` and installs it with `apt`:
+
+```sh
+curl -fsSLo /tmp/marktext-install.sh https://raw.githubusercontent.com/SimonasJurksa/marktext/develop/install.sh
+bash /tmp/marktext-install.sh                 # latest release
+bash /tmp/marktext-install.sh v0.24.0-sj.8    # a specific release
+bash /tmp/marktext-install.sh --download-only # only save the .deb to the current directory
+```
+
+Or by hand:
 
 ```sh
 wget https://github.com/SimonasJurksa/marktext/releases/download/v0.24.0-sj.8/marktext-linux-0.24.0-sj.8.deb
-sudo apt install ./marktext-linux-0.24.0-sj.8.deb
+sudo apt install --allow-downgrades ./marktext-linux-0.24.0-sj.8.deb
 ```
 
-Debian treats `0.24.0~sj.8` as *older* than upstream's `0.24.0~dev`; remove upstream first
-(`sudo apt remove marktext`) if apt refuses to downgrade. The Git features need `git` installed.
+`--allow-downgrades` is needed because Debian treats `0.24.0~sj.8` as *older* than upstream's
+`0.24.0~dev`. The Git features need `git` installed.
 
 Releases are built by GitHub Actions (`.github/workflows/release.yml`, Linux x64 only): pushing a
 `v*` tag builds the `.deb` inside an Ubuntu 20.04 container, so the package runs on Ubuntu 20.04
